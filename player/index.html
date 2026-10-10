@@ -463,8 +463,10 @@ window.lesson={ready:async()=>{await loaded;await document.fonts.ready;await Pro
 let quiz=0;
 function quizShow(){const e=window.EDITS[quiz];$('quiz-q').innerHTML=`第 ${quiz+1}／${window.EDITS.length} 題：<b>${e.orig}</b> → <b>${e.rev}</b>`;$('quiz-meta').textContent=`作文 ${e.id}・${e.p}`;$('feedback').textContent=''}
 function quizAnswer(grammar){const e=window.EDITS[quiz];const right=!grammar;$('feedback').textContent=(right?'答對了。':'再想想。')+`評閱標為「${e.kind}」：${e.why}`}
-const loaded=(async()=>{const res=await fetch(asset(projectFile));if(!res.ok)throw Error('Cannot load '+projectFile);project=await res.json();
- const er=await fetch(asset('player/edits.json'));window.EDITS=await er.json();
+// Retry transient network failures (e.g. connection resets right after a static-host deploy).
+async function getJSON(url){let last;for(let i=0;i<4;i++){try{const r=await fetch(url);if(r.ok)return await r.json();last=Error('HTTP '+r.status)}catch(e){last=e}await new Promise(r=>setTimeout(r,400*(i+1)))}throw Error('Cannot load '+url+': '+last.message)}
+const loaded=(async()=>{project=await getJSON(asset(projectFile));
+ window.EDITS=await getJSON(asset('player/edits.json'));
  await loadFonts();$('stage').style.width=project.width+'px';$('stage').style.height=project.height+'px';$('seek').max=Math.round(project.duration*project.fps)-1;
  buildTimeline();chapters();setAudio();scale();quizShow();await seekToFrame(0)})();
 $('play').onclick=()=>playing?pause():play();$('replay').onclick=async()=>{pause();await seekToFrame(0);await play()};
