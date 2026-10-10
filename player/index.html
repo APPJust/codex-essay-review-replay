@@ -1,0 +1,477 @@
+<!doctype html>
+<html lang="zh-Hant">
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Codex 批改作業重建</title>
+<style>
+:root{--bg:#0d181d;--panel:#14252c;--panel2:#1a3039;--line:#2f4b55;--paper:#f4efe4;--ink:#1d2a2f;--teal:#3fb8a6;--deep:#183e48;--amber:#e8a64b;--red:#e36b5e;--muted:#8ea6ae;--text:#e9f2f1;--blue:#86aee0;--mono:"Cascadia Mono",Consolas,"Lesson Sans","Noto Sans TC",monospace}
+*{box-sizing:border-box}
+body{margin:0;background:#081014;color:var(--text);font-family:"Lesson Sans","Noto Sans TC","Microsoft JhengHei",sans-serif}
+button,select,input{font:inherit}
+button,select{background:#152637;color:#f3fafb;border:1px solid #3b566b;border-radius:9px;padding:9px 14px;cursor:pointer}
+button:focus-visible,select:focus-visible,input:focus-visible{outline:3px solid #ffcc7f}
+#shell{margin:auto;max-width:1400px;padding:20px}
+#viewport{position:relative;overflow:hidden;border-radius:16px;box-shadow:0 22px 80px #0007}
+#stage{position:relative;transform-origin:top left;overflow:hidden;background:radial-gradient(ellipse at 75% 30%,#173039 0,#0e1b21 55%,#0a1418 100%)}
+#stage:before{content:"";position:absolute;inset:0;background-image:linear-gradient(#9fd8d306 1px,transparent 1px),linear-gradient(90deg,#9fd8d306 1px,transparent 1px);background-size:48px 48px;pointer-events:none}
+.abs{position:absolute}
+#badge{left:72px;top:34px;height:46px;padding:0 20px;border:1px solid #e8a64b88;border-radius:23px;background:#2a2014cc;color:#f4cf95;font-size:22px;display:flex;align-items:center;gap:12px;letter-spacing:1px;z-index:5}
+#badge i{width:10px;height:10px;border-radius:5px;background:var(--amber);display:block}
+#badge span{color:#c9a46c;font-size:18px}
+#clock{right:72px;top:28px;width:600px;height:64px;text-align:right;z-index:5}
+#clock b{display:block;font:500 25px var(--mono);color:var(--text)}
+#clock small{display:block;font-size:18px;color:var(--muted);margin-top:4px}
+#section{left:72px;top:104px;font-size:21px;letter-spacing:4px;color:var(--teal);height:30px;width:900px}
+#heading{left:72px;top:134px;width:1400px;height:72px;margin:0;font-size:52px;font-weight:700;line-height:72px;white-space:nowrap}
+#heading-en{left:74px;top:206px;width:1400px;height:34px;font-size:24px;color:var(--muted);white-space:nowrap}
+#main{left:72px;top:262px;width:1776px;height:528px}
+#tl{left:72px;top:800px;width:1776px;height:52px;z-index:4}
+#tl .lab{position:absolute;top:0;font-size:17px;color:var(--muted);white-space:nowrap}
+#tl .bar{position:absolute;left:0;right:0;top:30px;height:8px;border-radius:4px;background:#22363e}
+#tl .range{position:absolute;top:26px;height:16px;border-radius:5px;background:#3fb8a633;border:1px solid #3fb8a6aa}
+#tl .tick{position:absolute;top:28px;width:3px;height:12px;border-radius:2px;background:#5f7f88}
+#tl .tick.err{background:var(--red);height:18px;top:25px}
+#tl .tick.on{background:var(--teal)}
+#tl .tick.err.on{background:#ff8b7d;box-shadow:0 0 10px #ff8b7d}
+#caption{left:96px;bottom:22px;width:1728px;min-height:96px;z-index:6;border-radius:16px;background:#071014ee;border:1px solid #3fb8a633;display:flex;flex-direction:column;justify-content:center;align-items:center;padding:10px 28px;text-align:center;gap:4px}
+#caption1{font-size:41px;line-height:1.28;font-weight:500}
+#caption2{font-size:29px;line-height:1.28;color:#b9cfd8}
+#credit{left:0;top:0;width:1920px;height:1080px;display:none;flex-direction:column;align-items:center;justify-content:center;gap:26px;background:radial-gradient(ellipse at 50% 45%,#1d3c45 0,#0b1519 70%);z-index:7}
+#credit small{font-size:26px;letter-spacing:12px;color:var(--teal)}
+#credit strong{font-size:110px;letter-spacing:18px;font-weight:700}
+#credit em{font-style:normal;font-size:22px;color:var(--muted);letter-spacing:2px}
+/* scene components */
+.panel{position:absolute;border-radius:18px;background:var(--panel);border:1px solid var(--line)}
+.paper{background:var(--paper);color:var(--ink);border:none;box-shadow:0 14px 40px #0006}
+.term{position:absolute;border-radius:14px;background:#081014;border:1px solid #284049;font:22px/1.5 var(--mono);color:#cfe3e0;padding:16px 20px;overflow:hidden}
+.term .hd{font:600 16px "Lesson Sans",sans-serif;color:var(--muted);letter-spacing:2px;margin-bottom:8px}
+.term .ln{white-space:pre-wrap;word-break:break-all}
+.err{color:var(--red)}.ok{color:var(--teal)}.warn{color:var(--amber)}.dim{color:var(--muted)}.blue{color:var(--blue)}
+.tag{display:inline-flex;align-items:center;gap:8px;font-size:17px;padding:4px 12px;border-radius:14px;white-space:nowrap}
+.tag.A{background:#3fb8a62a;color:#8fe3d6;border:1px solid #3fb8a688}
+.tag.B{background:#86aee02a;color:#b9d2f2;border:1px solid #86aee088}
+.tag.C{background:#e8a64b2a;color:#f4cf95;border:1px solid #e8a64b99}
+.tag.R{background:#ffffff14;color:#d8e4e6;border:1px solid #ffffff40}
+.doc{position:absolute;background:#fff;box-shadow:0 12px 34px #0008;border-radius:4px;overflow:hidden}
+.doc img{width:100%;height:100%;display:block;object-fit:cover;object-position:top}
+.h3{font-size:22px;color:var(--muted);letter-spacing:2px}
+.big{font-weight:700}
+.chip{position:absolute;padding:10px 18px;border-radius:12px;font-size:24px;white-space:nowrap}
+.chip.ok{background:#3fb8a622;border:1px solid #3fb8a699;color:#9ff0e3}
+.chip.err{background:#e36b5e22;border:1px solid #e36b5e99;color:#ffb3a9}
+.chip.warn{background:#e8a64b22;border:1px solid #e8a64baa;color:#f6d39b}
+.chip.info{background:#ffffff10;border:1px solid #ffffff38;color:#e5eef0}
+.node{position:absolute;border-radius:16px;background:var(--panel2);border:2px solid var(--line);display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;font-size:24px;line-height:1.3}
+.node small{font-size:17px;color:var(--muted)}
+.mark{position:absolute;font-size:44px;font-weight:700}
+.ecard{position:absolute;width:62px;height:40px;border-radius:7px;font:600 15px var(--mono);display:flex;align-items:center;justify-content:center;color:#0d181d}
+.page{position:absolute;border-radius:3px;background:#f1ede4;box-shadow:0 3px 8px #0006}
+.pgn{position:absolute;font:600 14px var(--mono);color:#5d6e73;bottom:3px;width:100%;text-align:center}
+#controls{display:flex;gap:10px;align-items:center;flex-wrap:wrap;padding:16px 0}
+#seek{flex:1;min-width:170px}#time{font-variant-numeric:tabular-nums;color:#b4cad8}
+.interaction{padding:18px;border:1px solid #38586c;border-radius:14px;background:#0d1e2d;display:flex;flex-direction:column;gap:12px}
+.interaction p{margin:0}
+#quiz-q{font-size:20px}#quiz-meta{font-size:15px;color:#9cb2c2}
+.quiz-row{display:flex;gap:10px;flex-wrap:wrap}
+#feedback{color:#87e6d3;min-height:1.4em}
+.note{font-size:13px;color:#9cb2c2}
+body.export #shell{padding:0;max-width:none}body.export #viewport{border-radius:0;box-shadow:none}body.export #controls,body.export .interaction,body.export .note{display:none}
+@media (prefers-reduced-motion:reduce){#viewport{scroll-behavior:auto}}
+</style>
+<div id="shell">
+<div id="viewport"><main id="stage" aria-label="影片畫面">
+<div id="badge" class="abs" data-qa data-container="#stage"><i></i>依操作日誌重建<span>Reconstructed from the operation log</span></div>
+<div id="clock" class="abs" data-qa data-container="#stage"><b id="clock1"></b><small id="clock2"></small></div>
+<div id="section" class="abs" data-qa data-container="#stage"></div>
+<h1 id="heading" class="abs" data-qa data-container="#stage"></h1>
+<div id="heading-en" class="abs" data-qa data-container="#stage"></div>
+<div id="main" class="abs"></div>
+<div id="tl" class="abs" data-qa data-container="#stage"></div>
+<div id="credit" class="abs"><small>感謝觀看</small><strong>李振偉老師</strong><em>依 Codex 操作日誌與交接包重建・Reconstructed from logs and the handoff package</em></div>
+<div id="caption" class="abs" data-qa data-container="#stage"><div id="caption1"></div><div id="caption2"></div></div>
+</main></div>
+<nav id="controls" aria-label="播放控制">
+<button id="play">播放</button><button id="replay">重播</button>
+<input id="seek" type="range" min="0" step="1" value="0" aria-label="播放進度">
+<span id="time"></span><select id="locale" aria-label="配音語言"><option value="zh-TW">中文配音（中英字幕）</option></select>
+<select id="chapters" aria-label="章節"></select><button id="captions" aria-pressed="true">字幕開啟</button>
+</nav>
+<section class="interaction" aria-label="互動練習：文法錯誤或風格改善">
+<p id="quiz-q"></p><p id="quiz-meta"></p>
+<div class="quiz-row"><button id="quiz-g">妨礙理解的文法錯誤</button><button id="quiz-s">可選的風格／精準化改善</button><button id="quiz-next">下一題</button></div>
+<p id="feedback" role="status"></p>
+</section>
+<p class="note">互動題取自 materials/assessment/reviews.json 的實際修改對照，判定以評閱資料的標籤為準。本播放器依操作日誌重建，不是原始桌面錄影。</p>
+</div>
+<script>
+// Every visible state is a pure function of (frame, project). Scenes are rebuilt when the scene id changes.
+const $=id=>document.getElementById(id), params=new URLSearchParams(location.search);
+const exporting=params.get('export')==='1';if(exporting)document.body.classList.add('export');
+const projectFile=params.get('project')||'project.json';
+let project,frame=0,locale='zh-TW',playing=false,captionOn=true,last=0,audio=new Audio(),audioReady=false,built=null,update=()=>{};
+const clamp=x=>Math.min(1,Math.max(0,x)),ease=x=>{x=clamp(x);return x*x*(3-2*x)},lerp=(a,b,p)=>a+(b-a)*p;
+const out=x=>1-Math.pow(1-clamp(x),3);
+const asset=p=>new URL('../'+p,location.href).href;
+function el(parent,cls,html='',style={}){const e=document.createElement('div');if(cls)e.className=cls;e.innerHTML=html;Object.assign(e.style,style);parent.appendChild(e);return e}
+const UNITLESS=new Set(['lineHeight','opacity','zIndex','fontWeight','flex']);
+function px(o){const r={};for(const k in o)r[k]=typeof o[k]==='number'&&!UNITLESS.has(k)?o[k]+'px':o[k];return r}
+// Entrances slide in from above/left only (never push past a container's bottom/right edge);
+// QA-tracked panels only fade, so their boxes never leave #main or touch the timeline. Hidden = display:none.
+function show(e,p,dy=22,dx=0){p=clamp(p);if(e.dataset.qa!==undefined){dy=0;dx=0}if(e._display===undefined)e._display=e.style.display==='none'?'':e.style.display;e.style.opacity=p;e.style.transform=`translate(${-(1-p)*Math.abs(dx)}px,${-(1-p)*Math.abs(dy)}px)`;e.style.display=p<=0.001?'none':e._display}
+function qa(e,container='#main',group){e.dataset.qa='';e.dataset.container=container;if(group)e.dataset.overlapGroup=group;if(!e.id)e.id='q'+Math.random().toString(36).slice(2,8);return e}
+const fmt=n=>n.toLocaleString('en-US');
+function timeLabel(s){const m=Math.floor(s/60),r=s-m*60;return `${m}:${r.toFixed(1).padStart(4,'0')}`}
+
+/* -------- persistent chrome -------- */
+function buildTimeline(){const tl=$('tl');tl.innerHTML='';const W=1776,T=project.timeline.total;
+ el(tl,'lab','原作業時間軸（非等速呈現）',{left:'0px'});el(tl,'lab','22:04.778',{right:'0px'});
+ el(tl,'bar');const range=el(tl,'range');range.id='tl-range';
+ for(const c of project.timeline.calls){const t=el(tl,'tick'+(c.error?' err':''),'',{left:(W*c.offset/T-1)+'px'});t.dataset.n=c.n}
+ const now=el(tl,'lab','',{left:'0px'});now.id='tl-now';}
+function drawChrome(s,t){
+ const credit=s.section==='credit';
+ for(const id of ['section','heading','heading-en','tl','clock'])$(id).style.display=credit?'none':'block';
+ $('credit').style.display=credit?'flex':'none';
+ if(credit){const p=ease((t-s.start)/0.8);$('credit').style.opacity=p;return}
+ const p=ease((t-s.start)/0.7);
+ $('section').textContent=`${s.section_label[0]}  ${s.section_label[1]}  ·  ${String(s.index).padStart(2,'0')} / 13`;
+ $('heading').textContent=s.title;$('heading-en').textContent=s.title_en;
+ for(const id of ['section','heading','heading-en'])show($(id),p,0,-24);
+ if(s.log_offset!=null){$('clock1').textContent=`原作業 2026-10-09 ${s.log_clock}`;$('clock2').textContent=`開始後 +${s.log_offset.toFixed(3)} 秒・本章涵蓋至 +${s.log_end.toFixed(3)} 秒（時間壓縮）`}
+ else{$('clock1').textContent='交接整理 2026-10-10';$('clock2').textContent='原作業已於 21:18:27.223 結束（+1,324.778 秒）'}
+ const T=project.timeline.total,W=1776,r=$('tl-range'),now=$('tl-now');
+ if(s.log_offset!=null){r.style.display='block';r.style.left=W*s.log_offset/T+'px';r.style.width=Math.max(6,W*(s.log_end-s.log_offset)/T)+'px';
+  now.style.display='block';now.textContent=`本章 +${timeLabel(s.log_offset)} – +${timeLabel(s.log_end)}`;now.style.left=Math.min(W-420,Math.max(330,W*s.log_offset/T))+'px';now.style.color='#9fe9dc'}
+ else{r.style.display='none';now.style.display='block';now.textContent='本章不在原作業時間內';now.style.left='640px';now.style.color='#c9a46c'}
+ const tools=new Set(s.tools||[]);for(const k of $('tl').querySelectorAll('.tick'))k.classList.toggle('on',tools.has('T'+String(k.dataset.n).padStart(3,'0')))}
+
+/* -------- scenes -------- */
+// ctx.at(i): absolute start time of cue i. Cues before a sample window count as already happened.
+function makeCtx(s){const map=new Map(s.cues.map(c=>[c.i,c.start]));const lo=Math.min(...s.cues.map(c=>c.i)),hi=Math.max(...s.cues.map(c=>c.i));
+ return{at:i=>map.has(i)?map.get(i):(i<lo?-1e9:1e9),start:s.start,end:s.end}}
+const P=(t,a,d=0.6)=>out((t-a)/d);
+
+const SCENES={
+s01(m,c){
+ const L=qa(el(m,'panel','',px({left:0,top:0,width:820,height:528})));
+ L.innerHTML=`<div class="h3" style="position:absolute;left:36px;top:30px">原作業開始・TASK START</div>
+ <div style="position:absolute;left:36px;top:70px;font:700 92px var(--mono);letter-spacing:2px">2026-10-09</div>
+ <div style="position:absolute;left:40px;top:184px;font:500 36px var(--mono);color:#9fe9dc">20:56:22.451 <span style="font-size:24px;color:var(--muted)">Asia/Taipei</span></div>`;
+ const req=el(L,'panel paper','',px({left:36,top:252,width:748,height:244}));
+ req.innerHTML=`<div style="padding:22px 26px;font-size:21px;line-height:1.6"><div style="font-size:16px;letter-spacing:2px;color:#5b6d72;margin-bottom:6px">使用者需求（逐字節錄，20:56:23）</div>依照附檔的評分標準，將目錄"中原大學英文作文10份"中的所有作文, 批改作文並評論，將評論建議整理在一份word文件中, 並做成powerpoint簡報 [$ppt-master] , 分析同學的寫作狀況.</div>`;
+ const R=qa(el(m,'panel','',px({left:860,top:0,width:916,height:528})));
+ el(R,'h3','RUBRIC・三向度各 1–5 分',px({position:'absolute',left:32,top:28}));
+ const dims=[['結構與組織','Structure & Organization'],['內容與想法','Content & Ideas'],['文法與表達','Grammar & Expressions']];
+ const cols=dims.map((d,i)=>el(R,'node',`${d[0]}<small>${d[1]}</small><b style="font:700 30px var(--mono);margin-top:8px;color:#9fe9dc">1–5</b>`,px({left:32+i*262,top:70,width:240,height:150})));
+ const sum=el(R,'',`<span style="font:700 46px var(--mono);color:var(--amber)">＝ 15 分</span>`,px({position:'absolute',left:32,top:236}));
+ const grid=el(R,'',``,px({position:'absolute',left:32,top:308,width:850,height:120}));
+ const docs=[];for(let i=0;i<10;i++){docs.push(el(grid,'',`<div style="font:700 22px var(--mono);color:#0d181d">${String(i+1).padStart(2,'0')}</div><div style="font-size:13px;color:#4c5b60">.docx</div>`,px({position:'absolute',left:i*85,top:0,width:72,height:96,background:'#f1ede4',borderRadius:6,display:'flex',flexDirection:'column',alignItems:'center',justifyContent:'center'})))}
+ const note=el(R,'',`十篇・正文各 4 段・248–257 英文字`,px({position:'absolute',left:32,top:440,fontSize:22,color:'#cfe3e0'}));
+ const note2=el(R,'chip info',`畫面時間＝原作業開始後秒數（+s）`,px({left:430,top:432}));
+ return t=>{show(L,P(t,c.start,0.8));show(req,P(t,c.at(2)));show(R,P(t,c.at(3)));
+  cols.forEach((e,i)=>show(e,P(t,c.at(4)+i*0.25),30));show(sum,P(t,c.at(5)),0,-20);
+  docs.forEach((e,i)=>show(e,P(t,c.at(6)+i*0.08,0.4),40));show(note,P(t,c.at(6)+0.9));show(note2,P(t,c.at(7)))}
+},
+s02(m,c){
+ const D=qa(el(m,'panel','',px({left:0,top:0,width:1776,height:250})));
+ const n0=el(D,'node','讀取技能說明<small>SKILL.md</small>',px({left:30,top:70,width:230,height:110}));
+ const n1=el(D,'node','Windows 沙箱<small>exec_command</small>',px({left:400,top:22,width:260,height:92}));
+ const n2=el(D,'node','Node REPL<small>同樣依賴沙箱</small>',px({left:400,top:136,width:260,height:92}));
+ const n3=el(D,'node','升權執行<small>require_escalated</small>',px({left:860,top:70,width:260,height:110}));
+ const n4=el(D,'node','ppt-master 入口<small>版本 6.7.0</small>',px({left:1300,top:70,width:260,height:110}));
+ const x1=el(D,'mark err','✕',px({left:680,top:34})),x2=el(D,'mark err','✕',px({left:680,top:148})),ok=el(D,'mark ok','✓',px({left:1580,top:90}));
+ const svg=document.createElementNS('http://www.w3.org/2000/svg','svg');svg.setAttribute('width','1776');svg.setAttribute('height','250');Object.assign(svg.style,{position:'absolute',left:'0',top:'0',pointerEvents:'none'});
+ svg.innerHTML=`<path id="a1" d="M260 115 L400 68" stroke="#e36b5e" stroke-width="3" fill="none" stroke-dasharray="8 7"/><path id="a2" d="M260 135 L400 182" stroke="#e36b5e" stroke-width="3" fill="none" stroke-dasharray="8 7"/><path id="a3" d="M260 125 L860 125" stroke="#3fb8a6" stroke-width="4" fill="none"/><path id="a4" d="M1120 125 L1300 125" stroke="#3fb8a6" stroke-width="4" fill="none"/>`;D.prepend(svg);
+ const a3=svg.querySelector('#a3'),a4=svg.querySelector('#a4'),L3=a3.getTotalLength?1:1;
+ const T=qa(el(m,'term','',px({left:0,top:272,width:1180,height:256})));
+ T.innerHTML=`<div class="hd">原始工具輸出節錄（已截短）・RAW TOOL OUTPUT EXCERPT</div>`;
+ const lines=[['<span class="dim">+8.204s  T001</span> <span class="err">exec_command failed: … helper_unknown_error: setup refresh had errors</span>'],
+  ['<span class="dim">+23.226s T004</span> <span class="err">node_repl … windows sandbox failed: helper_unknown_error</span>'],
+  ['<span class="dim">+29.089s T005</span> <span class="ok">以 require_escalated 讀取 ppt-master 入口（6.7.0）</span>'],
+  ['<span class="dim">+48.748s T006</span> documents 技能・資料夾清單・套件環境']].map(l=>el(T,'ln',l[0]));
+ const note=qa(el(m,'panel','',px({left:1210,top:272,width:566,height:256})));
+ note.innerHTML=`<div style="padding:28px;font-size:27px;line-height:1.55"><span class="warn big">沙箱沒有被修好</span><br>工作改走一條<span class="ok">獲准的執行路徑</span>。<div style="font-size:19px;color:var(--muted);margin-top:14px">之後的命令皆以 require_escalated 執行（06 E01）</div></div>`;
+ return t=>{show(D,P(t,c.start,0.8));show(n0,1);show(n1,P(t,c.at(1)-0.3));show(n2,P(t,c.at(2)-0.3));
+  show(x1,P(t,c.at(1)+0.4,0.3),0);show(x2,P(t,c.at(2)+0.4,0.3),0);
+  const r=P(t,c.at(3),1.2);a3.style.opacity=r;a3.style.strokeDasharray='900';a3.style.strokeDashoffset=900*(1-r);show(n3,P(t,c.at(3)+0.5));
+  const r2=P(t,c.at(3)+1.2,0.7);a4.style.opacity=r2;a4.style.strokeDasharray='180';a4.style.strokeDashoffset=180*(1-r2);show(n4,P(t,c.at(3)+1.6));show(ok,P(t,c.at(3)+2.0,0.3),0);
+  svg.querySelector('#a1').style.opacity=P(t,c.at(1)-0.3);svg.querySelector('#a2').style.opacity=P(t,c.at(2)-0.3);
+  show(T,P(t,c.at(1)-0.2));lines.forEach((e,i)=>show(e,P(t,[c.at(1),c.at(2),c.at(3),c.at(4)][i]),10));show(note,P(t,c.at(4)))}
+},
+s03(m,c){
+ const L=qa(el(m,'panel','',px({left:0,top:0,width:860,height:528})));
+ el(L,'h3','來源轉換・source_to_md.py',px({position:'absolute',left:30,top:26}));
+ const files=['Rubric','01','02','03','04','05','06','07','08','09','10'].map((n,i)=>el(L,'',`<b style="font:700 ${n.length>2?15:20}px var(--mono)">${n}</b>`,px({position:'absolute',left:30,top:70+i*36,width:96,height:30,background:'#f1ede4',color:'#0d181d',borderRadius:5,display:'flex',alignItems:'center',justifyContent:'center'})));
+ const box=el(L,'node','DOCX → Markdown<small>conversion profile</small>',px({left:300,top:170,width:250,height:120}));
+ const mds=files.map((f,i)=>el(L,'',`<span style="font:600 15px var(--mono)">${i?String(i).padStart(2,'0'):'Rubric'}.md</span>`,px({position:'absolute',left:640,top:70+i*36,width:120,height:30,border:'1px solid #3fb8a6aa',color:'#9ff0e3',borderRadius:5,display:'flex',alignItems:'center',justifyContent:'center'})));
+ const done=el(L,'chip ok','[Done] Success: 11/11, Failed: 0',px({left:250,top:440}));
+ const R=qa(el(m,'panel','',px({left:900,top:0,width:876,height:528})));
+ el(R,'h3','對話紀錄・TRANSCRIPT（依日誌重建）',px({position:'absolute',left:30,top:26}));
+ const q=el(R,'',`<div style="font-size:17px;color:var(--muted);margin-bottom:6px">Codex・20:59:00.034（+157.583 s）</div>簡報是否授權我依上述方向決定版型、頁數及製作細節，直接完成？`,px({position:'absolute',left:30,top:70,width:640,padding:'16px 20px',background:'#22404a',borderRadius:14,fontSize:24,lineHeight:1.5}));
+ const a=el(R,'',`<div style="font-size:17px;color:#5b6d72;margin-bottom:6px">使用者・20:59:33.937</div><b>授權你決定並完成</b>`,px({position:'absolute',right:30,top:250,width:380,padding:'16px 20px',background:'#f4efe4',color:'#1d2a2f',borderRadius:14,fontSize:28}));
+ const gap=el(R,'',`<span style="font:700 30px var(--mono);color:var(--amber)">33.903 s</span><div style="font-size:17px;color:var(--muted)">等待期間仍做獨立檢查</div>`,px({position:'absolute',left:60,top:250}));
+ const chips=[el(R,'chip info','設計方向：評閱稿',px({left:30,top:430})),el(R,'chip info','固定 14 頁',px({left:290,top:430})),el(R,'chip ok','走 delegated 分支',px({left:470,top:430}))];
+ return t=>{show(L,P(t,c.start,0.8));
+  files.forEach((f,i)=>{const p=P(t,c.at(1)+i*0.18,0.7);f.style.opacity=1-0.6*p;f.style.transform=`translateX(${p*40}px)`});
+  show(box,P(t,c.at(0)+0.4));mds.forEach((e,i)=>show(e,P(t,c.at(1)+0.5+i*0.18,0.5),0,-30));show(done,P(t,c.at(1)+2.4));
+  show(R,P(t,c.at(2)));show(q,P(t,c.at(3)));show(gap,P(t,c.at(4)-0.3));show(a,P(t,c.at(4)),0,30);chips.forEach((e,i)=>show(e,P(t,c.at(5)+i*0.3)))}
+},
+s04(m,c){
+ const L=qa(el(m,'panel','',px({left:0,top:0,width:880,height:528})));
+ el(L,'h3','原稿段落・Document(p).paragraphs',px({position:'absolute',left:30,top:24}));
+ const rows=[['[0]','題目 The causes and effects of …'],['[1]','學校／年級 ⏎ 姓名／學號（同一段內換行）'],['[2]','P1 正文'],['[3]','P2 正文'],['[4]','P3 正文'],['[5]','P4 正文']];
+ const boxes=rows.map((r,i)=>el(L,'',`<span style="font:600 20px var(--mono);color:var(--muted);width:56px;display:inline-block">${r[0]}</span>${r[1]}`,px({position:'absolute',left:30,top:62+i*58,width:520,height:48,padding:'0 14px',display:'flex',alignItems:'center',background:'#1f3a44',borderRadius:8,fontSize:21,border:'2px solid transparent'})));
+ const brk=el(L,'',``,px({position:'absolute',left:560,width:14,borderRight:'4px solid var(--red)',borderTop:'4px solid var(--red)',borderBottom:'4px solid var(--red)',borderRadius:'0 8px 8px 0'}));
+ const code=el(L,'term','',px({left:600,top:62,width:250,height:150,padding:'12px 14px',fontSize:20}));
+ const res=el(L,'',``,px({position:'absolute',left:600,top:226,width:260,fontSize:22,lineHeight:1.5}));
+ const judge=el(L,'chip info','評分＝讀文判斷；Python＝核對引用與計算',px({left:30,top:428}));
+ const R=qa(el(m,'panel','',px({left:920,top:0,width:856,height:528})));
+ el(R,'h3','十篇建議總分（滿分 15）',px({position:'absolute',left:30,top:24}));
+ const totals=[13,13,13,13,15,12,13,15,14,13],H=300,base=380,scale=H/15;
+ const bars=totals.map((v,i)=>{const b=el(R,'',`<span style="position:absolute;top:-30px;width:100%;text-align:center;font:600 19px var(--mono)">${v}</span>`,px({position:'absolute',left:60+i*64,width:44,bottom:528-base,height:v*scale,background:v===15?'#3fb8a6':v===12?'#e8a64b':'#5d8c97',borderRadius:'6px 6px 0 0',transformOrigin:'bottom'}));el(R,'',String(i+1).padStart(2,'0'),px({position:'absolute',left:60+i*64,top:base+8,width:44,textAlign:'center',font:'600 17px var(--mono)',color:'#8ea6ae'}));return b});
+ const axis=el(R,'',``,px({position:'absolute',left:50,top:base,width:650,borderTop:'2px solid #48646d'}));
+ const mean=el(R,'',`<span style="position:absolute;left:660px;top:-14px;font:600 20px var(--mono);color:var(--amber);white-space:nowrap">平均 13.4</span>`,px({position:'absolute',left:50,top:base-13.4*scale,width:650,borderTop:'2px dashed var(--amber)'}));
+ const dims=el(R,'',`三項平均　結構 <b class="ok">4.2</b>　內容 <b class="ok">4.3</b>　文法 <b class="ok">4.9</b>`,px({position:'absolute',left:30,top:426,fontSize:23}));
+ const rng=el(R,'',`中位數 13・範圍 12–15`,px({position:'absolute',left:30,top:470,fontSize:21,color:'#cfe3e0'}));
+ const stamp=el(R,'chip warn','建議評分・非唯一正解',px({left:520,top:462}));
+ return t=>{show(L,P(t,c.start,0.8));boxes.forEach((b,i)=>show(b,P(t,c.start+0.3+i*0.1)));show(judge,P(t,c.at(0)));
+  const fixed=t>=c.at(3);const from=fixed?2:3;const pb=P(t,c.at(1));
+  boxes.forEach((b,i)=>{b.style.borderColor=(i>=from&&t>=c.at(1))?(fixed?'#3fb8a6':'#e36b5e'):(i===1&&t>=c.at(2)&&!fixed?'#e8a64b':'transparent')});
+  const top=62+from*58,h=(6-from)*58-10;brk.style.top=top+'px';brk.style.height=h+'px';brk.style.borderColor=fixed?'var(--teal)':'var(--red)';brk.style.opacity=pb;
+  code.innerHTML=`<div class="ln"><span class="dim">d['original']=</span></div><div class="ln ${fixed?'ok':'err'}" style="font-size:30px">ps[${from}:]</div><div class="ln dim">assert len(…)==4</div>`;show(code,pb);
+  res.innerHTML=fixed?`<span class="ok big">len = 4 ✓</span><br><span style="font-size:19px">三十處原句對照通過</span>`:(t>=c.at(2)?`<span class="err big">len = 3 ≠ 4</span><br><span class="warn" style="font-size:19px">[1] 是同一段內換行</span>`:`<span class="err big">len = 3 ≠ 4</span><br><span class="err" style="font-size:19px">AssertionError（T015）</span>`);show(res,pb);
+  show(R,P(t,c.at(4)-0.2));bars.forEach((b,i)=>{const p=P(t,c.at(4)+i*0.06,0.6);b.style.transform=`scaleY(${p})`;b.style.opacity=p>0?1:0});show(axis,P(t,c.at(4)-0.2),0);show(mean,P(t,c.at(4)+1.0),0,-20);show(dims,P(t,c.at(4)+1.6));show(rng,P(t,c.at(5)));show(stamp,P(t,c.at(6)),0)}
+},
+s05(m,c){
+ const KINDS=[['表達優化',22]],edits=window.EDITS;
+ const A=qa(el(m,'','',px({position:'absolute',left:0,top:0,width:1776,height:528})),'#main','s05-swap');
+ const G=el(A,'panel','',px({left:0,top:0,width:470,height:400,border:'2px dashed #e36b5e88',background:'#1a1416'}));
+ G.innerHTML=`<div style="padding:26px"><div style="font-size:30px" class="big">文法錯誤</div><div style="font-size:20px;color:var(--muted)">Grammar errors・妨礙理解</div></div>`;
+ const gz=el(G,'',`0`,px({position:'absolute',left:0,width:470,top:118,textAlign:'center',font:'700 150px var(--mono)',color:'#ffb3a9'}));
+ const gzl=el(G,'',`三十則中沒有一則`,px({position:'absolute',left:0,width:470,top:322,textAlign:'center',fontSize:28,color:'#ffd3cc'}));
+ const tray=el(A,'panel','',px({left:0,top:420,width:1776,height:108,background:'#101e24'}));
+ const trayLab=el(tray,'',`30 則修改對照<br><span style="font-size:16px;color:var(--muted)">reviews.json・待分類</span>`,px({position:'absolute',left:24,top:24,fontSize:21,lineHeight:1.3}));
+ const S1=el(A,'panel','',px({left:510,top:0,width:640,height:400,border:'2px solid #3fb8a666'}));
+ S1.innerHTML=`<div style="padding:26px 26px 0"><div style="font-size:30px" class="big">表達優化</div><div style="font-size:20px;color:var(--muted)">Expression refinement・可選</div></div>`;
+ const n1=el(S1,'',`0`,px({position:'absolute',right:28,top:20,font:'700 64px var(--mono)',color:'#9ff0e3'}));
+ const S2=el(A,'panel','',px({left:1190,top:0,width:586,height:400,border:'2px solid #e8a64b66'}));
+ S2.innerHTML=`<div style="padding:26px 26px 0"><div style="font-size:30px" class="big">其他精準化修訂</div><div style="font-size:20px;color:var(--muted)">搭配・範圍・概念・論述・語體・因果</div></div>`;
+ const n2=el(S2,'',`0`,px({position:'absolute',right:28,top:20,font:'700 64px var(--mono)',color:'#f6d39b'}));
+ // 30 cards: start in a strip across the top, then fly to their bin slot.
+ let a=0,b=0;const cards=edits.map((e,i)=>{const style=e.kind==='表達優化';const card=el(A,'ecard',`${e.id}·${e.p}`,px({background:style?'#7fd8ca':'#f0c27e'}));
+  const slot=style?a++:b++;const tx=style?530+(slot%8)*76:1210+(slot%7)*80, ty=style?140+Math.floor(slot/8)*52:140+Math.floor(slot/7)*52;
+  return{card,i,style,sx:300+(i%15)*84,sy:434+Math.floor(i/15)*48,tx,ty,label:e.kind}});
+ const sub=el(S2,'',edits.filter(e=>e.kind!=='表達優化').map(e=>`<span style="display:inline-block;margin:0 10px 6px 0;padding:3px 10px;border-radius:8px;background:#e8a64b22;font-size:17px">${e.kind}</span>`).join(''),px({position:'absolute',left:20,top:252,width:546}));
+ // Example (phase B)
+ const B=qa(el(m,'','',px({position:'absolute',left:0,top:0,width:1776,height:528})),'#main','s05-swap');
+ const ex=el(B,'panel paper','',px({left:0,top:0,width:1110,height:330}));
+ ex.innerHTML=`<div style="padding:24px 30px"><div style="font-size:18px;color:#5b6d72;letter-spacing:1px">01 號・P1・<b style="color:#25766b">表達優化</b>　　來源：reviews.json</div>
+ <div style="margin-top:16px;font-size:20px;color:#5b6d72">原句</div><div style="font-size:40px;font-family:Georgia,serif">Online <span id="ld" style="text-decoration:line-through;text-decoration-color:#b35a32;text-decoration-thickness:4px;color:#b35a32">long-distance</span> courses</div>
+ <div style="margin-top:10px;font-size:20px;color:#5b6d72">建議</div><div style="font-size:40px;font-family:Georgia,serif;color:#25766b">Online courses</div></div>`;
+ const cm=el(B,'panel','',px({left:1150,top:0,width:626,height:330}));
+ cm.innerHTML=`<div style="padding:24px 28px;font-size:25px;line-height:1.6"><div class="h3" style="margin-bottom:10px">評語原文（reviews.json）</div>online 已交代授課方式；刪去 long-distance 可使名詞更精簡，<span class="warn big">原寫法並非嚴重文法錯誤。</span></div>`;
+ const tt=el(B,'panel','',px({left:0,top:360,width:1776,height:168}));
+ tt.innerHTML=`<div style="padding:20px 30px"><div class="h3">十篇共用題目（原稿標題）</div><div style="font-size:34px;font-family:Georgia,serif;margin-top:10px">The causes and effects of the <span style="border-bottom:4px solid var(--amber)">increase of</span> online long-distance <span style="border-bottom:4px solid var(--amber)">course</span></div></div>`;
+ const st=el(tt,'chip warn','共用題目・統一說明・不列入個人扣分',px({right:30,top:24}));
+ return t=>{const swap=P(t,c.at(5)-0.4,0.6);show(A,1-swap,0,0);A.style.display=swap>=1?'none':'block';B.style.display=swap<=0?'none':'block';show(B,swap,0);
+  show(G,P(t,c.at(0)+0.2));show(S1,P(t,c.at(1)+0.6));show(S2,P(t,c.at(1)+0.9));
+  const sortA=c.at(2),sortB=c.at(3);let na=0,nb=0;
+  cards.forEach(o=>{const enter=P(t,c.at(1)+1.2+o.i*0.03,0.5);const go=o.style?P(t,sortA+0.2+o.i*0.06,0.8):P(t,sortB+0.2+o.i*0.05,0.8);
+   const x=lerp(o.sx,o.tx,ease(go)),y=lerp(o.sy,o.ty,ease(go))-Math.sin(Math.PI*clamp(go))*60;o.card.style.left=x+'px';o.card.style.top=y+'px';o.card.style.opacity=enter;o.card.style.transform=`scale(${0.85+0.15*enter})`;
+   if(go>0.95){o.style?na++:nb++}});
+  n1.textContent=na;n2.textContent=nb;show(sub,P(t,sortB+1.6));show(tray,P(t,c.at(1)+0.8));
+  trayLab.innerHTML=na+nb===30?`30 則已全部分類<br><span style="font-size:16px;color:var(--muted)">依 reviews.json 的標籤</span>`:`30 則修改對照<br><span style="font-size:16px;color:var(--muted)">reviews.json・待分類 ${30-na-nb}</span>`;
+  const gp=P(t,c.at(4),0.6);show(gz,gp,0);gz.style.transform=`scale(${1.25-0.25*gp})`;show(gzl,P(t,c.at(4)+0.4));G.style.boxShadow=gp>0?`0 0 ${40*gp}px #e36b5e55`:'none';
+  show(ex,P(t,c.at(5)));const strike=B.querySelector('#ld');strike.style.opacity=1-0.55*P(t,c.at(5)+1.6);show(cm,P(t,c.at(6)));show(tt,P(t,c.at(7)));show(st,P(t,c.at(8)),0)}
+},
+s06(m,c){
+ const T=qa(el(m,'term','',px({left:0,top:0,width:1776,height:150})));
+ T.innerHTML=`<div class="hd">原始工具輸出節錄・T018（+515.721 s）</div><div class="ln dim">File "…\\documents\\render_docx.py", line 79, in _resolve_soffice</div><div class="ln err">FileNotFoundError: LibreOffice soffice.exe was not found on PATH</div>`;
+ const F=qa(el(m,'panel','',px({left:0,top:176,width:1776,height:352})));
+ el(F,'h3','原定路徑 vs 替代路徑',px({position:'absolute',left:30,top:22}));
+ const r1=[el(F,'node','build_review_docx.py<small>產生 Word</small>',px({left:30,top:66,width:300,height:100})),el(F,'node','render_docx.py<small>標準轉圖</small>',px({left:420,top:66,width:300,height:100})),el(F,'node','LibreOffice soffice.exe<small>未安裝</small>',px({left:810,top:66,width:340,height:100,borderColor:'#e36b5e'}))];
+ const x=el(F,'mark err','✕',px({left:1170,top:82}));
+ const r2=[el(F,'node','Word COM<small>唯讀・Visible=false・DisplayAlerts=0</small>',px({left:420,top:206,width:380,height:110,borderColor:'#3fb8a6'})),el(F,'node','ExportAsFixedFormat<small>PDF（T019）</small>',px({left:890,top:206,width:300,height:110,borderColor:'#3fb8a6'})),el(F,'node','頁面圖檢查<small>之後逐頁看圖</small>',px({left:1280,top:206,width:260,height:110,borderColor:'#3fb8a6'}))];
+ const ok=el(F,'mark ok','✓',px({left:1560,top:228}));
+ const tag=el(F,'chip warn','命令觸發的背景匯出・不是有人在 Word 按下匯出',px({right:30,top:14}));
+ return t=>{show(T,P(t,c.at(0)));show(F,P(t,c.at(1)-0.3));r1.forEach((e,i)=>show(e,P(t,c.at(1)-0.2+i*0.25),0,-30));show(x,P(t,c.at(1)+1.2,0.3),0);
+  r2.forEach((e,i)=>show(e,P(t,c.at(2)+i*0.6),0,-30));show(ok,P(t,c.at(2)+2.2,0.3),0);show(tag,P(t,c.at(3)),0)}
+},
+s07(m,c){
+ const L=qa(el(m,'panel','',px({left:0,top:0,width:640,height:528})));
+ L.innerHTML=`<div style="padding:26px"><div class="h3">設計規格（spec_lock）</div><div style="font:700 44px var(--mono);margin-top:12px">1280 × 720</div><div style="font-size:26px;margin-top:4px">14 頁・繁體中文・評閱稿</div></div>`;
+ const sw=[['#F8F6F1','暖白'],['#183E48','深青'],['#25766B','青綠'],['#B35A32','棕橙']].map((s,i)=>el(L,'',`<div style="width:100%;height:62px;border-radius:10px;background:${s[0]};border:1px solid #ffffff33"></div><div style="font:600 15px var(--mono);margin-top:6px">${s[0]}</div><div style="font-size:16px;color:var(--muted)">${s[1]}</div>`,px({position:'absolute',left:26+i*148,top:200,width:132})));
+ const fs=el(L,'',`正文 26・標題 44・次標 32・註解 22・頁註 16・大數字 88 px`,px({position:'absolute',left:26,top:330,width:590,fontSize:20,color:'#cfe3e0'}));
+ const chart=el(L,'chip info','數字＝可編輯文字，非圖表物件 → 未啟動 chart verification',px({left:26,top:380,whiteSpace:'normal',width:590,fontSize:21}));
+ const R=qa(el(m,'panel','',px({left:680,top:0,width:1096,height:260})));
+ el(R,'',`<span class="tag C">C 交接時補製預覽（顯示最終版，非早期檢查當下畫面）</span>`,px({position:'absolute',left:24,top:16}));
+ const th=[1,2,3,4,5].map(i=>{const d=el(R,'doc',`<img src="${asset('assets/ppt_followup/slide-0'+i+'.png')}">`,px({left:24+i*212-212,top:64,width:196,height:110}));const w=el(R,'',``,px({position:'absolute',left:24+i*212-212,top:180,width:196,textAlign:'center',font:'600 17px var(--mono)'}));return{d,w,i}});
+ const T=qa(el(m,'term','',px({left:680,top:280,width:1096,height:248,fontSize:19})));
+ T.innerHTML=`<div class="hd">原始工具輸出節錄・T022 / T024</div>`;
+ const l1=el(T,'ln',`<span class="warn">[WARN] page: unknown data-pptx-role='slide-number'</span>  <span class="dim">× 5 頁</span>`);
+ const l2=el(T,'ln',`<span class="warn">[WARN] 02_rubric.svg  &lt;text&gt; (x=64, y=516; text='1–5 分') exceeds …</span>`);
+ const l3=el(T,'ln',`<span class="err">ModuleNotFoundError: No module named 'fitz'</span>`);
+ const l4=el(T,'ln',`<span class="ok">slide-number → page-number・擴大下緣 → early gate 5/5 Passed・0 warnings</span>`);
+ const l5=el(T,'ln',`<span class="ok">PDF → PNG：改用已有的 pypdfium2</span>`);
+ return t=>{show(L,P(t,c.at(0)));sw.forEach((e,i)=>show(e,P(t,c.at(0)+0.4+i*0.15)));show(fs,P(t,c.at(0)+1));show(chart,P(t,c.at(1)));
+  show(R,P(t,c.at(2)-0.3));th.forEach(o=>show(o.d,P(t,c.at(2)-0.2+o.i*0.12)));
+  const warn=t>=c.at(3)&&t<c.at(5);const fixed=t>=c.at(5);th.forEach(o=>{o.w.innerHTML=fixed?'<span class="ok">✓ 0 warnings</span>':warn?(o.i===2?'<span class="warn">⚠ 頁碼＋下緣</span>':'<span class="warn">⚠ 頁碼角色</span>'):'';o.d.style.outline=warn?'3px solid #e8a64b':fixed?'3px solid #3fb8a6':'none'});
+  show(T,P(t,c.at(3)-0.2));show(l1,P(t,c.at(3)),8);show(l2,P(t,c.at(3)+0.8),8);show(l3,P(t,c.at(4)),8);show(l4,P(t,c.at(5)),8);show(l5,P(t,c.at(6)),8)}
+},
+s08(m,c){
+ const T=qa(el(m,'term','',px({left:0,top:0,width:860,height:258,fontSize:21})));
+ T.innerHTML=`<div class="hd">原始工具輸出節錄・T025（+927.081 s）</div><div class="ln err">SyntaxError: Unexpected token '>'</div><div class="ln dim">外層 JavaScript 字串錯誤 → 內層 shell 未執行</div>`;
+ const fix=el(T,'ln',`<span class="ok">T026 改用 String.raw\`…\` 重送相同內容 ✓</span>`);
+ const S=qa(el(m,'panel','',px({left:0,top:282,width:860,height:246})));
+ el(S,'',`<span class="tag C">C 交接時補製預覽・第 6–10 頁</span>`,px({position:'absolute',left:24,top:16}));
+ const th=[6,7,8,9,10].map((n,i)=>el(S,'doc',`<img src="${asset('assets/ppt_followup/slide-'+String(n).padStart(2,'0')+'.png')}">`,px({left:24+i*164,top:70,width:150,height:84})));
+ const lab=el(S,'',`P06–P10 手寫 SVG 完成`,px({position:'absolute',left:24,top:176,fontSize:22,color:'#9ff0e3'}));
+ const R=qa(el(m,'panel','',px({left:900,top:0,width:876,height:528})));
+ el(R,'h3','Word 頁數：預期 23（3＋每人 2 頁 × 10）',px({position:'absolute',left:30,top:24}));
+ const got=el(R,'',`<span style="font:700 72px var(--mono)" class="err">19</span><span style="font-size:24px;color:var(--muted)">　頁（T021 Pages: 19）</span>`,px({position:'absolute',left:30,top:62}));
+ const run=el(R,'',``,px({position:'absolute',left:30,top:180,width:816,height:180}));
+ run.innerHTML=`<div style="font-size:20px;color:var(--muted);margin-bottom:10px">段落中的 run（示意）</div>
+ <div style="display:flex;gap:10px;align-items:center;font-size:22px"><span style="padding:10px 14px;background:#1f3a44;border-radius:8px">01 評閱…</span><span id="pb" style="padding:10px 14px;border-radius:8px;border:2px solid #3fb8a6;color:#9ff0e3;font:600 20px var(--mono)">⤓ 分頁符號</span><span style="padding:10px 14px;background:#1f3a44;border-radius:8px">02 評閱…</span></div>
+ <div id="why" style="margin-top:16px;font-size:21px;line-height:1.5"></div>`;
+ const rule=el(R,'chip ok','只有字元真的改變時，才重設 run.text（T026）',px({left:30,top:430,whiteSpace:'normal',width:816,fontSize:23}));
+ return t=>{show(T,P(t,c.at(0)));show(fix,P(t,c.at(2)),8);show(S,P(t,c.at(2)+0.3));th.forEach((e,i)=>show(e,P(t,c.at(2)+0.5+i*0.15)));show(lab,P(t,c.at(2)+1.4));
+  show(R,P(t,c.at(3)-0.3));show(got,P(t,c.at(3)));show(run,P(t,c.at(4)-0.2));
+  const broken=t>=c.at(4)+0.9&&t<c.at(5),fixedNow=t>=c.at(5);const pb=R.querySelector('#pb'),why=R.querySelector('#why');
+  pb.textContent=broken?'⏎ 一般換行':'⤓ 分頁符號';pb.style.borderColor=broken?'#e36b5e':'#3fb8a6';pb.style.color=broken?'#ffb3a9':'#9ff0e3';
+  why.innerHTML=fixedNow?'<span class="ok">分頁符號保留 → 每位同學重新從新頁開始</span>':broken?'<span class="err">清理文字時無條件重設 run.text → 分頁符號變成一般換行，頁面被擠在一起</span>':'';show(rule,P(t,c.at(5)))}
+},
+s09(m,c){
+ const T=qa(el(m,'term','',px({left:0,top:0,width:700,height:528,fontSize:20})));
+ T.innerHTML=`<div class="hd">原始工具輸出節錄・T028 / T029</div>`;
+ const l1=el(T,'ln',`<span class="warn">⚠ P11 群組 bounds 下緣不足</span>`),l2=el(T,'ln',`<span class="warn">⚠ P14 重複的 font-size 屬性</span>`);
+ const l3=el(T,'ln',`<span class="dim">[SUMMARY] Total files: 14</span>\n<span class="ok">  [OK] Fully passed: 14 (100%)\n  [WARN] With warnings: 0 (0%)</span>`);
+ const l4=el(T,'ln',`\n<span class="err">pdf pages 24</span>  <span class="dim">（Word 本版）</span>`);
+ const l5=el(T,'ln',`<span class="warn">・第 4 頁空白\n・標題帶預設藍色下框線（w:pBdr）</span>`);
+ const R=qa(el(m,'panel','',px({left:740,top:0,width:1036,height:528})));
+ const strip=el(R,'',``,px({position:'absolute',left:24,top:20,width:990,height:70}));
+ const pages=[];for(let i=1;i<=24;i++){const p=el(strip,'page',`<div class="pgn">${i}</div>`,px({left:(i-1)*41,top:0,width:34,height:48}));if(i===4){p.style.background='#fff';p.style.outline='3px solid #e36b5e'}pages.push(p)}
+ const blank=el(R,'',`空白頁`,px({position:'absolute',left:24+3*41-12,top:74,fontSize:17,color:'#ffb3a9'}));
+ el(R,'',`<span class="tag A">A 原作業當時回傳・T030・21:15:21</span>`,px({position:'absolute',left:24,top:104}));
+ const d1=el(R,'doc',`<img src="${asset('assets/historical/T030_image03.png')}">`,px({left:24,top:146,width:270,height:370}));
+ const d2=el(R,'doc',`<img src="${asset('assets/historical/T030_image04.png')}">`,px({left:320,top:146,width:270,height:370}));
+ const c2=el(R,'',`第 3 頁：檔案對照表行距寬<br><br><b class="warn">第 5 頁：01 號評閱</b><br><span style="font-size:18px;color:var(--muted)">（應在第 4 頁）</span><br><br><span style="font-size:17px;color:var(--muted)">姓名、學號已在影片副本遮罩</span>`,px({position:'absolute',left:620,top:170,width:390,fontSize:22,lineHeight:1.4}));
+ return t=>{show(T,P(t,c.at(0)));show(l1,P(t,c.at(1)),8);show(l2,P(t,c.at(1)+0.7),8);show(l3,P(t,c.at(2)),8);show(l4,P(t,c.at(3)),8);show(l5,P(t,c.at(3)+0.8),8);
+  show(R,P(t,c.at(3)-0.2));pages.forEach((p,i)=>show(p,P(t,c.at(3)+i*0.04,0.4),12));show(blank,P(t,c.at(3)+1.3));show(d1,P(t,c.at(4)-0.3));show(d2,P(t,c.at(4)));show(c2,P(t,c.at(4)+0.5));
+  pages[4].style.outline=t>=c.at(4)?'3px solid #e8a64b':'none'}
+},
+s10(m,c){
+ const R=qa(el(m,'panel','',px({left:0,top:0,width:1036,height:528})));
+ const strip=el(R,'',``,px({position:'absolute',left:24,top:20,width:990,height:70}));
+ const pages=[];for(let i=1;i<=24;i++){pages.push(el(strip,'page',`<div class="pgn">${i}</div>`,px({left:(i-1)*41,top:0,width:34,height:48})))}
+ const cnt=el(R,'',``,px({position:'absolute',left:24,top:74,fontSize:19}));
+ el(R,'',`<span class="tag A">A 原作業當時回傳・修正前 T030 → 修正後 T035</span>`,px({position:'absolute',left:24,top:108}));
+ // Zoom on the p.3 file list (775x1095 source scaled to 560 wide): row spacing is the visible difference.
+ const zoom=src=>`<img src="${asset(src)}" style="position:absolute;width:560px;height:auto;left:-28px;top:-452px">`;
+ const before=el(R,'doc',zoom('assets/historical/T030_image03.png'),px({left:24,top:150,width:262,height:366}));
+ const after=el(R,'doc',zoom('assets/historical/T035_image03.png'),px({left:306,top:150,width:262,height:366}));
+ const lb=el(R,'',`修正前 p.3 檔案對照表`,px({position:'absolute',left:24,top:150,padding:'2px 8px',background:'#e36b5ecc',fontSize:16,borderRadius:'0 0 6px 0'}));
+ const la=el(R,'',`修正後 p.3 檔案對照表`,px({position:'absolute',left:306,top:150,padding:'2px 8px',background:'#3fb8a6cc',color:'#0d181d',fontSize:16,borderRadius:'0 0 6px 0'}));
+ const how=el(R,'',`・刪除標題段落框線 w:pBdr<br>・縮小檔案對照表字級<br>・縮小段後距<br><br><b class="ok">Pages: 23（T033）</b><br><span style="font-size:19px">01 號評閱 第 5 頁 → 第 4 頁</span>`,px({position:'absolute',left:596,top:160,width:420,fontSize:23,lineHeight:1.5}));
+ const T=qa(el(m,'term','',px({left:1066,top:0,width:710,height:528,fontSize:19})));
+ T.innerHTML=`<div class="hd">原始工具輸出節錄・T032 / T033</div>`;
+ const e1=el(T,'ln',`<span class="dim">[3/3] Flattening text...</span>\n<span class="err">[ERROR] svg_final publish failed: [WinError 32] 程序無法存取檔案，因為檔案正由另一個程序使用。</span>`);
+ const e2=el(T,'ln',`\n<span class="warn">占用程序：日誌未記錄\n同步軟體＝未證實的推測</span>`);
+ const e3=el(T,'ln',`\n<span class="ok">T033 重試 finalize_svg.py ✓</span>`);
+ return t=>{show(R,P(t,c.start,0.6));
+  const col=P(t,c.at(0)+0.6,1.4);pages.forEach((p,i)=>{const n=i+1;let x=(n-1)*41;if(n===4){p.style.background='#fff';p.style.outline='3px solid #e36b5e';p.style.opacity=1-col;p.style.transform=`scaleX(${1-col})`}else{if(n>4)x-=41*col;p.style.left=x+'px';p.style.opacity=1;p.querySelector('.pgn').textContent=n>4&&col>0.5?n-1:n}
+   p.style.outline=n===5&&col<0.5?'3px solid #e8a64b':n===5&&col>=0.5?'3px solid #3fb8a6':n===4?'3px solid #e36b5e':'none'});
+  cnt.innerHTML=col>=1?'<span class="ok">23 頁・空白頁移除</span>':'<span class="err">24 頁・含空白第 4 頁</span>';
+  show(before,P(t,c.at(0)-0.4));show(lb,P(t,c.at(0)-0.4));show(after,P(t,c.at(0)+0.6));show(la,P(t,c.at(0)+0.6));show(how,P(t,c.at(1)-0.2));
+  show(T,P(t,c.at(2)-0.2));show(e1,P(t,c.at(2)),8);show(e2,P(t,c.at(3)),8);show(e3,P(t,c.at(4)),8)}
+},
+s11(m,c){
+ const T=qa(el(m,'term','',px({left:0,top:0,width:640,height:528,fontSize:19})));
+ T.innerHTML=`<div class="hd">原始工具輸出節錄・T034（+1233.756 s）</div><div class="ln dim">svg_to_pptx.py … --no-notes --no-animations</div>`;
+ const l1=el(T,'ln',`\n<span class="ok">[POSTFLIGHT] status=passed\nquality_gate=passed slides=14\nwarning_categories=0</span>`);
+ const l2=el(T,'ln',`\n<span class="dim">pdf pages 23</span>`);
+ const l3=el(T,'ln',`\n講者備註：無\n動畫：無\n旁白：無`);
+ const R=qa(el(m,'panel','',px({left:680,top:0,width:1096,height:528})));
+ el(R,'',`<span class="tag B">B 最終保存的 Word 頁面圖・逐頁查看 T035–T038</span>`,px({position:'absolute',left:24,top:14}));
+ const pg=[];for(let i=1;i<=23;i++){const k=i-1;pg.push(el(R,'doc',`<img src="${asset('assets/word_final/page-'+String(i).padStart(2,'0')+'.png')}">`,px({left:24+(k%12)*88,top:52+Math.floor(k/12)*122,width:78,height:110})))}
+ const batch=el(R,'',``,px({position:'absolute',left:24,top:300,fontSize:18,color:'#b9d2f2',width:1050}));
+ const tagC=el(R,'',`<span class="tag C">C 交接時補製預覽（2026-10-10）・原作業未在 PowerPoint 逐頁觀看</span>`,px({position:'absolute',left:24,top:332}));
+ const sl=[];for(let i=1;i<=14;i++){const k=i-1;sl.push(el(R,'doc',`<img src="${asset('assets/ppt_followup/slide-'+String(i).padStart(2,'0')+'.png')}">`,px({left:24+(k%7)*150,top:372+Math.floor(k/7)*76,width:140,height:68})))}
+ return t=>{show(T,P(t,c.at(0)));show(l1,P(t,c.at(1)),8);show(l2,P(t,c.at(2)),8);show(l3,P(t,c.at(3)),8);show(R,P(t,c.at(2)-0.3));
+  const groups=[[1,6],[7,12],[13,18],[19,23]];let shown=0;groups.forEach((g,gi)=>{const p=P(t,c.at(2)+gi*0.9,0.5);for(let i=g[0];i<=g[1];i++)show(pg[i-1],p,10);if(p>0.5)shown=gi+1});
+  batch.textContent=shown?['T035：1–6','T036：7–12','T037：13–18','T038：19–23'].slice(0,shown).join('　→　'):'';
+  show(tagC,P(t,c.at(3)));sl.forEach((e,i)=>show(e,P(t,c.at(3)+0.3+i*0.05,0.4),10));sl.forEach(e=>e.style.outline=t>=c.at(4)?'2px dashed #e8a64b':'none')}
+},
+s12(m,c){
+ const L=qa(el(m,'panel','',px({left:0,top:0,width:600,height:528})));
+ const counters=[['10','篇作文'],['30','則修改'],['23','頁 Word'],['14','頁簡報']].map((v,i)=>el(L,'',`<div style="font:700 60px var(--mono);color:#9ff0e3">${v[0]}</div><div style="font-size:22px">${v[1]}</div>`,px({position:'absolute',left:28+(i%2)*280,top:24+Math.floor(i/2)*124})));
+ const dur=el(L,'',`<div class="h3">日誌總長</div><div style="font:700 46px var(--mono);margin-top:6px">22 分 4.778 秒</div><div style="font:500 20px var(--mono);color:var(--muted)">duration_ms = 1,324,778</div>`,px({position:'absolute',left:28,top:282}));
+ const cost=el(L,'chip warn','金額成本：無資料',px({left:28,top:452}));
+ const R=qa(el(m,'panel','',px({left:640,top:0,width:1136,height:528})));
+ el(R,'h3','Token（原作業累計，40 筆回應）',px({position:'absolute',left:30,top:22}));
+ const W=1076,tot=4791087,inp=4755881,cached=4586496,outp=35206;
+ const bar=el(R,'',``,px({position:'absolute',left:30,top:60,width:W,height:46,borderRadius:8,overflow:'hidden',background:'#22363e'}));
+ const bc=el(bar,'',`<span style="padding-left:14px">cached input 4,586,496（96.44%）</span>`,px({position:'absolute',left:0,top:0,height:46,width:W*cached/tot,background:'#3f7f86',display:'flex',alignItems:'center',fontSize:19,whiteSpace:'nowrap'}));
+ const bu=el(bar,'',``,px({position:'absolute',left:W*cached/tot,top:0,height:46,width:W*(inp-cached)/tot,background:'#86aee0'}));
+ const bo=el(bar,'',``,px({position:'absolute',left:W*inp/tot,top:0,height:46,width:Math.max(3,W*outp/tot),background:'#e8a64b'}));
+ const leg=el(R,'',`<span style="color:#86aee0">■</span> 未快取 input 169,385　<span style="color:#e8a64b">■</span> output 35,206　＝ total <b>4,791,087</b>`,px({position:'absolute',left:30,top:114,fontSize:20}));
+ const not=el(R,'chip info','多輪重讀上下文的計量，不是生成四百多萬字',px({left:30,top:152,fontSize:21}));
+ const rule=el(R,'',`cached ⊂ input，不重複相加；reasoning_output 2,178 ⊂ output（分類計數）`,px({position:'absolute',left:30,top:208,fontSize:19,color:'#cfe3e0'}));
+ el(R,'h3','帳戶額度快照（共享帳戶）',px({position:'absolute',left:30,top:252}));
+ const gauge=(y,name,a,b,d)=>{const g=el(R,'',``,px({position:'absolute',left:30,top:y,width:W,height:70}));g.innerHTML=`<div style="font-size:20px">${name}</div><div class="gb" style="position:absolute;top:30px;left:0;width:760px;height:22px;border-radius:11px;background:#22363e;overflow:hidden"><div class="ga" style="position:absolute;left:0;top:0;height:22px;width:${760*a/100}px;background:#5d8c97"></div><div class="gd" style="position:absolute;left:${760*a/100}px;top:0;height:22px;width:0;background:#e8a64b"></div></div><div class="gl" style="position:absolute;left:780px;top:22px;font:600 22px var(--mono)"></div>`;return{g,a,b,d}};
+ const g1=gauge(286,'5 小時額度已用',13,91,'+78 個百分點'),g2=gauge(366,'週額度已用',52,64,'+12 個百分點');
+ const warn=el(R,'chip warn','觀察到的增加・不能全部歸因於本任務',px({left:30,top:450,fontSize:21}));
+ const first=el(R,'',`首筆快照：開始後 +9.095 秒<br>（10/10 06:06 另一筆查詢不能替代原任務終點）`,px({position:'absolute',left:560,top:446,fontSize:17,color:'var(--muted)',lineHeight:1.4}));
+ return t=>{show(L,P(t,c.at(0)-0.3));counters.forEach((e,i)=>show(e,P(t,c.at(0)+i*0.25)));show(dur,P(t,c.at(1)));show(cost,P(t,c.at(8)));
+  show(R,P(t,c.at(2)-0.3));const gb=P(t,c.at(2),1.2);bar.style.clipPath=`inset(0 ${100-100*gb}% 0 0)`;show(leg,P(t,c.at(3)));show(not,P(t,c.at(4)));show(rule,P(t,c.at(5)));
+  [g1,g2].forEach((o,i)=>{const p=P(t,c.at(6)+i*0.5,1.0);show(o.g,P(t,c.at(6)+i*0.3));o.g.querySelector('.gd').style.width=760*(o.b-o.a)/100*p+'px';o.g.querySelector('.gl').innerHTML=`${o.a}% → ${Math.round(lerp(o.a,o.b,p))}%　<span class="warn">${p>0.98?o.d:''}</span>`});
+  show(warn,P(t,c.at(7)));show(first,P(t,c.at(8)))}
+},
+s13(m,c){
+ const no=qa(el(m,'panel','',px({left:0,top:0,width:1776,height:100})));
+ no.innerHTML=`<div style="display:flex;gap:46px;align-items:center;height:100px;padding:0 30px;font-size:27px"><span class="h3">本片沒有</span><span>桌面錄影 <b class="err">✕</b></span><span>滑鼠軌跡 <b class="err">✕</b></span><span>點擊座標 <b class="err">✕</b></span><span id="r13" class="tag R" style="font-size:20px">命令卡・時間卡＝依操作日誌重建</span></div>`;
+ const tiers=[['A','原作業當時回傳','assets/historical/T030_image04.png','T030・24 頁中間版 p.5'],['B','最終保存','assets/word_final/page-01.png','Word 最終 23 頁'],['C','交接補製','assets/ppt_followup/slide-03.png','2026-10-10 PowerPoint 預覽']].map((d,i)=>{
+  const card=qa(el(m,'panel','',px({left:i*600,top:124,width:576,height:250})));
+  const wide=d[0]==='C';el(card,'doc',`<img src="${asset(d[2])}">`,px({left:24,top:24,width:wide?300:150,height:wide?169:202}));
+  el(card,'',`<span class="tag ${d[0]}" style="font-size:20px">${d[0]}</span><div style="font-size:28px;margin-top:12px" class="big">${d[1]}</div><div style="font-size:19px;color:var(--muted);margin-top:6px">${d[3]}</div>`,px({position:'absolute',left:wide?344:200,top:30,width:wide?210:350}));return card});
+ const ppt=qa(el(m,'chip info','原作業 PPT：無旁白・無動畫・無講者備註（--no-notes --no-animations）',px({left:0,top:394,fontSize:22})));
+ const rep=qa(el(m,'chip warn','重建：依 07_REPRODUCE 於獨立目錄執行；不直接重跑 evidence/commands 的失敗版本',px({left:0,top:458,fontSize:21})));
+ const take=qa(el(m,'','<b>失敗被保留下來，每一次修正都能回查證據。</b>',px({position:'absolute',left:0,top:394,width:1776,height:134,display:'flex',alignItems:'center',justifyContent:'center',fontSize:46,background:'#0d181dee',borderRadius:18,border:'1px solid #3fb8a688'})),'#main','s13-end');
+ ppt.dataset.overlapGroup='s13-end';rep.dataset.overlapGroup='s13-end';
+ return t=>{show(no,P(t,c.at(0)));show(no.querySelector('#r13'),P(t,c.at(1)),0);tiers.forEach((e,i)=>show(e,P(t,c.at(2)+i*0.4)));show(ppt,P(t,c.at(3)));show(rep,P(t,c.at(4)));
+  const k=P(t,c.at(5),0.8);show(take,k,20);ppt.style.opacity=Math.min(ppt.style.opacity,1-k);rep.style.opacity=Math.min(rep.style.opacity,1-k)}
+}};
+
+function buildScene(s){const m=$('main');m.innerHTML='';built=s.id;update=()=>{};if(s.section==='credit')return;update=SCENES[s.id](m,makeCtx(s))}
+function currentScene(t){return project.variants[locale].scenes.find(s=>t>=s.start&&t<s.end)||project.variants[locale].scenes.at(-1)}
+function draw(){const t=frame/project.fps,s=currentScene(t);if(built!==s.id)buildScene(s);drawChrome(s,t);update(t);
+ const cue=project.variants[locale].subtitles.cues.find(c=>t>=c.start&&t<c.end);const credit=s.section==='credit';
+ $('caption').style.display=cue&&captionOn&&!credit?'flex':'none';$('caption1').textContent=cue?.text[0]||'';$('caption2').textContent=cue?.text[1]||'';
+ $('seek').value=frame;$('time').textContent=t.toFixed(1)+' / '+project.duration.toFixed(1)+' s';$('chapters').value=s.start}
+
+/* -------- player plumbing (API shared with the skill renderer) -------- */
+function scale(){if(!project)return;const s=exporting?1:Math.min(1,$('shell').clientWidth/project.width);$('stage').style.transform='scale('+s+')';$('viewport').style.width=project.width*s+'px';$('viewport').style.height=project.height*s+'px'}
+function setAudio(){audio.pause();const mix=project.variants[locale].mix;audioReady=!!mix;if(mix)audio.src=asset(mix);else audio.removeAttribute('src');audio.load()}
+function chapters(){const select=$('chapters');select.replaceChildren();for(const s of project.variants[locale].scenes){const o=document.createElement('option');o.value=s.start;o.textContent=s.section==='credit'?'片尾':`${String(s.index).padStart(2,'0')} ${s.title}`;select.append(o)}}
+async function loadFonts(){for(const a of project.font_assets||[]){const face=new FontFace(a.family,'url('+JSON.stringify(asset(a.url))+')');try{document.fonts.add(await face.load())}catch{throw Error('Required font could not load: '+a.family)}}await document.fonts.ready}
+async function seekToFrame(n,language=locale){if(!project.variants[language])throw Error('Unknown locale');frame=Math.max(0,Math.min(Math.round(project.duration*project.fps)-1,Math.round(n)));draw();if(!exporting&&audioReady&&Math.abs(audio.currentTime-frame/project.fps)>.15)audio.currentTime=frame/project.fps;return frame}
+function pause(){playing=false;audio.pause();$('play').textContent='播放'}
+async function play(){if(frame>=project.duration*project.fps-1)await seekToFrame(0);playing=true;last=performance.now();$('play').textContent='暫停';if(audioReady){audio.currentTime=frame/project.fps;try{await audio.play()}catch{pause();$('feedback').textContent='音軌無法播放，請以本機伺服器開啟並允許播放音訊。';return}}requestAnimationFrame(tick)}
+function tick(now){if(!playing)return;const next=audioReady?Math.floor(audio.currentTime*project.fps):frame+(now-last)*project.fps/1000;last=now;if(next>=project.duration*project.fps){seekToFrame(project.duration*project.fps-1);pause();return}frame=next;draw();requestAnimationFrame(tick)}
+audio.addEventListener('ended',()=>{if(playing){seekToFrame(project.duration*project.fps-1);pause()}});
+window.lesson={ready:async()=>{await loaded;await document.fonts.ready;await Promise.all([...document.images].map(i=>i.decode().catch(()=>{})))},seekToFrame,bounds:()=>[],getProject:()=>project};
+
+/* -------- learning interaction: grammar error or optional style improvement? -------- */
+let quiz=0;
+function quizShow(){const e=window.EDITS[quiz];$('quiz-q').innerHTML=`第 ${quiz+1}／${window.EDITS.length} 題：<b>${e.orig}</b> → <b>${e.rev}</b>`;$('quiz-meta').textContent=`作文 ${e.id}・${e.p}`;$('feedback').textContent=''}
+function quizAnswer(grammar){const e=window.EDITS[quiz];const right=!grammar;$('feedback').textContent=(right?'答對了。':'再想想。')+`評閱標為「${e.kind}」：${e.why}`}
+const loaded=(async()=>{const res=await fetch(asset(projectFile));if(!res.ok)throw Error('Cannot load '+projectFile);project=await res.json();
+ const er=await fetch(asset('player/edits.json'));window.EDITS=await er.json();
+ await loadFonts();$('stage').style.width=project.width+'px';$('stage').style.height=project.height+'px';$('seek').max=Math.round(project.duration*project.fps)-1;
+ buildTimeline();chapters();setAudio();scale();quizShow();await seekToFrame(0)})();
+$('play').onclick=()=>playing?pause():play();$('replay').onclick=async()=>{pause();await seekToFrame(0);await play()};
+$('seek').oninput=()=>{pause();seekToFrame(Number($('seek').value))};$('chapters').onchange=()=>{pause();seekToFrame(Number($('chapters').value)*project.fps)};
+$('captions').onclick=()=>{captionOn=!captionOn;$('captions').textContent=captionOn?'字幕開啟':'字幕關閉';$('captions').setAttribute('aria-pressed',String(captionOn));draw()};
+$('quiz-g').onclick=()=>quizAnswer(true);$('quiz-s').onclick=()=>quizAnswer(false);$('quiz-next').onclick=()=>{quiz=(quiz+1)%window.EDITS.length;quizShow()};
+addEventListener('keydown',e=>{if(e.target.tagName==='INPUT'||e.target.tagName==='SELECT')return;if(e.code==='Space'){e.preventDefault();playing?pause():play()}});
+window.addEventListener('resize',scale);
+</script>
+</html>

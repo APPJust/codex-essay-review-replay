@@ -1,0 +1,242 @@
+[
+ {
+  "id": "01",
+  "p": "P1",
+  "orig": "Online long-distance courses",
+  "rev": "Online courses",
+  "kind": "表達優化",
+  "why": "online 已交代授課方式；刪去 long-distance 可使名詞更精簡，原寫法並非嚴重文法錯誤。"
+ },
+ {
+  "id": "01",
+  "p": "P3",
+  "orig": "The clearest effect for me is saving travel time.",
+  "rev": "For me, the clearest benefit is the time saved on commuting.",
+  "kind": "表達優化",
+  "why": "benefit 明示正面效果，commuting 比 travel 更精準地指往返學校。"
+ },
+ {
+  "id": "01",
+  "p": "P4",
+  "orig": "I think online courses should continue, but students need a regular study plan.",
+  "rev": "Online courses should remain available, but students need a consistent study schedule.",
+  "kind": "表達優化",
+  "why": "以 remain available 表達持續提供課程；study schedule 更具體對應時間安排。"
+ },
+ {
+  "id": "02",
+  "p": "P1",
+  "orig": "online long-distance courses",
+  "rev": "online courses",
+  "kind": "表達優化",
+  "why": "精簡授課形式的名稱，不影響原意。"
+ },
+ {
+  "id": "02",
+  "p": "P3",
+  "orig": "This change can reduce some pressure in student life.",
+  "rev": "This flexibility can ease some of the pressure students face.",
+  "kind": "表達優化",
+  "why": "明確指出 This 指的是 flexibility，避免概括的 change。"
+ },
+ {
+  "id": "02",
+  "p": "P4",
+  "orig": "Then several lessons become a large amount of work.",
+  "rev": "As a result, several unfinished lessons can create an overwhelming workload.",
+  "kind": "表達優化",
+  "why": "補明未完成課程與工作量的關係，讓結果更具體。"
+ },
+ {
+  "id": "03",
+  "p": "P1",
+  "orig": "online long-distance courses",
+  "rev": "online courses",
+  "kind": "表達優化",
+  "why": "省去重複的遠距概念。"
+ },
+ {
+  "id": "03",
+  "p": "P3",
+  "orig": "A student who needs to stay at home may still follow a lesson if the student feels well enough.",
+  "rev": "Students who need to stay at home may still follow a lesson if they feel well enough.",
+  "kind": "表達優化",
+  "why": "改成複數並以 they 承接，保留身體狀況許可的條件。"
+ },
+ {
+  "id": "03",
+  "p": "P4",
+  "orig": "A poor connection can make the teacher sound unclear,",
+  "rev": "A poor connection can make it difficult to hear the teacher clearly,",
+  "kind": "表達優化",
+  "why": "把網路問題造成的聽覺障礙寫得更直接。"
+ },
+ {
+  "id": "04",
+  "p": "P1",
+  "orig": "Online long-distance courses",
+  "rev": "Online courses",
+  "kind": "表達優化",
+  "why": "用較精簡且常見的名稱。"
+ },
+ {
+  "id": "04",
+  "p": "P3",
+  "orig": "The positive effect is a wider learning experience.",
+  "rev": "One positive effect is access to a wider range of learning experiences.",
+  "kind": "表達優化",
+  "why": "One 避免暗示只有一項正面效果；range 使範圍增加的意思更清楚。"
+ },
+ {
+  "id": "04",
+  "p": "P4",
+  "orig": "we should not choose only because a title sounds exciting.",
+  "rev": "we should not choose a course solely because its title sounds exciting.",
+  "kind": "表達優化",
+  "why": "補出 course 使受詞明確；原句在上下文中仍可理解。"
+ },
+ {
+  "id": "05",
+  "p": "P1",
+  "orig": "Online long-distance courses",
+  "rev": "Online courses",
+  "kind": "表達優化",
+  "why": "簡化冗長名稱，不改變公平參與的主旨。"
+ },
+ {
+  "id": "05",
+  "p": "P3",
+  "orig": "One good effect is that location may become a smaller barrier to education.",
+  "rev": "One benefit is that location may become less of a barrier to education.",
+  "kind": "表達優化",
+  "why": "less of a barrier 是更自然的搭配；保留 may 的審慎語氣。"
+ },
+ {
+  "id": "05",
+  "p": "P4",
+  "orig": "Schools should also consider lending equipment and offering places with reliable Internet.",
+  "rev": "Schools should also consider lending equipment and providing study spaces with reliable Internet access.",
+  "kind": "表達優化",
+  "why": "study spaces 與 Internet access 更精準呈現支援措施。"
+ },
+ {
+  "id": "06",
+  "p": "P1",
+  "orig": "This makes me have mixed feelings about online long-distance courses.",
+  "rev": "I therefore have mixed feelings about online courses.",
+  "kind": "搭配修訂",
+  "why": "原句可以理解，但 makes me have 較迂迴；直接 have mixed feelings 更自然。"
+ },
+ {
+  "id": "06",
+  "p": "P3",
+  "orig": "Small online discussion groups can also help everyone have a turn.",
+  "rev": "Small online discussion groups can also give everyone a chance to contribute.",
+  "kind": "表達優化",
+  "why": "contribute 明確指向提出想法，而不只輪流發言。"
+ },
+ {
+  "id": "06",
+  "p": "P3",
+  "orig": "I sometimes need extra time to organize my English,",
+  "rev": "I sometimes need extra time to formulate my ideas in English,",
+  "kind": "搭配修訂",
+  "why": "organize my English 所指較模糊；改為用英文組織想法，語意較準確。"
+ },
+ {
+  "id": "07",
+  "p": "P1",
+  "orig": "a normal class",
+  "rev": "a live class",
+  "kind": "概念精準化",
+  "why": "normal 容易暗示錄影課不正常；live 更準確對比可暫停的錄影。"
+ },
+ {
+  "id": "07",
+  "p": "P1",
+  "orig": "Online long-distance courses are increasing because learning tools are convenient,",
+  "rev": "Recorded online courses are becoming more common because learning tools are convenient,",
+  "kind": "範圍限定",
+  "why": "讓主張與下文錄影、暫停、重播的例子一致。"
+ },
+ {
+  "id": "07",
+  "p": "P4",
+  "orig": "The negative effect is that I may delay the work.",
+  "rev": "One possible drawback is that I may put off the work.",
+  "kind": "表達優化",
+  "why": "possible 保留個人情境的可能性；put off 更直接表示拖延。"
+ },
+ {
+  "id": "08",
+  "p": "P1",
+  "orig": "Long-distance learning is useful for many subjects,",
+  "rev": "Online learning is useful for many subjects,",
+  "kind": "範圍精準化",
+  "why": "本文談網路授課，online 比 long-distance 更直接對應題目。"
+ },
+ {
+  "id": "08",
+  "p": "P3",
+  "orig": "For subjects based on reading and discussion, the effects can be positive.",
+  "rev": "For courses centered on reading and discussion, online learning can be beneficial.",
+  "kind": "表達優化",
+  "why": "把泛指的 effects 換成具體主詞；原句並非錯誤。"
+ },
+ {
+  "id": "08",
+  "p": "P4",
+  "orig": "These experiences are difficult to replace with a video.",
+  "rev": "A video alone cannot easily replace these hands-on experiences.",
+  "kind": "表達優化",
+  "why": "alone 保留影片輔助的可能，hands-on 指明實作經驗。"
+ },
+ {
+  "id": "09",
+  "p": "P2",
+  "orig": "Students only need a suitable device and an Internet connection to access them.",
+  "rev": "To access these videos, students need a suitable device and a reliable Internet connection.",
+  "kind": "論述精準化",
+  "why": "only 容易低估設備與連線條件；保留取得影片的範圍，避免擴大到全部學習需求。"
+ },
+ {
+  "id": "09",
+  "p": "P4",
+  "orig": "Subtitles can become something I depend on too much.",
+  "rev": "I may become too dependent on subtitles.",
+  "kind": "表達優化",
+  "why": "用直接的主詞與搭配表達過度依賴。"
+ },
+ {
+  "id": "09",
+  "p": "P4",
+  "orig": "students still need to open their mouths and communicate.",
+  "rev": "students still need to speak and interact with others.",
+  "kind": "語體優化",
+  "why": "原句生動且可接受；修訂版較適合正式書面論述。"
+ },
+ {
+  "id": "10",
+  "p": "P1",
+  "orig": "Online long-distance courses",
+  "rev": "Online courses",
+  "kind": "表達優化",
+  "why": "精簡重複的課程名稱。"
+ },
+ {
+  "id": "10",
+  "p": "P2",
+  "orig": "One cause of the increase is the time needed to travel to school.",
+  "rev": "One reason for this growth is the need to reduce commuting time.",
+  "kind": "因果精準化",
+  "why": "「需要減少通勤」比「通勤所需時間」更清楚表達採用線上課程的動機。"
+ },
+ {
+  "id": "10",
+  "p": "P4",
+  "orig": "But the saved time does not always lead to a better life.",
+  "rev": "However, saving time does not always lead to healthier routines.",
+  "kind": "表達優化",
+  "why": "healthier routines 更直接銜接下文睡眠、活動與休息。"
+ }
+]

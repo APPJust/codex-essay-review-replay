@@ -1,0 +1,2598 @@
+{
+ "schema_version": 1,
+ "is_template": false,
+ "title": "Codex 依 Rubric 批改十篇英文作文：操作日誌重建",
+ "content_type": "technical",
+ "learning_goal": "看完能說出這次批改作業的主要步驟、各項失敗如何被修正，並能分辨文法錯誤與風格改善、正確解讀用時與用量數字。",
+ "fps": 30,
+ "width": 1920,
+ "height": 1080,
+ "duration": 520.0,
+ "subtitle_languages": [
+  "zh-TW",
+  "en-US"
+ ],
+ "voice_locales": [
+  "zh-TW"
+ ],
+ "voice_scope_note": "使用者指定只做中文配音（中英字幕）；不製作英文配音版。",
+ "font_assets": [
+  {
+   "family": "Lesson Sans",
+   "url": "fonts/NotoSansTC-VF.ttf"
+  }
+ ],
+ "approval": {
+  "status": "approved",
+  "evidence": "2026-10-10 Claude Code 對話：使用者看過樣片 output/sample/sample-s05.draft.mp4 與 13 章大綱後，在確認問題「樣片與全片大綱是否確認？」選擇「確認，開始全片製作」。片長於同日改為約 8 分 40 秒（使用者選擇「延長到約 8 分 40 秒」）。"
+ },
+ "sources": [
+  {
+   "id": "handoff-record",
+   "title": "01_FULL_EXECUTION_RECORD.md（交接包完整執行報告）",
+   "url": "../01_FULL_EXECUTION_RECORD.md",
+   "checked_at": "2026-10-10"
+  },
+  {
+   "id": "timeline",
+   "title": "02_TIMELINE.md／.csv 與 evidence/tool_calls、tool_outputs",
+   "url": "../02_TIMELINE.md",
+   "checked_at": "2026-10-10"
+  },
+  {
+   "id": "usage",
+   "title": "03_USAGE_AND_TIME.md／.json",
+   "url": "../03_USAGE_AND_TIME.md",
+   "checked_at": "2026-10-10"
+  },
+  {
+   "id": "errors",
+   "title": "06_ERRORS_AND_RECOVERY.md",
+   "url": "../06_ERRORS_AND_RECOVERY.md",
+   "checked_at": "2026-10-10"
+  },
+  {
+   "id": "provenance",
+   "title": "08_ASSET_PROVENANCE.md",
+   "url": "../08_ASSET_PROVENANCE.md",
+   "checked_at": "2026-10-10"
+  },
+  {
+   "id": "reviews",
+   "title": "materials/assessment/reviews.json（十篇評閱原始資料）",
+   "url": "../materials/assessment/reviews.json",
+   "checked_at": "2026-10-10"
+  },
+  {
+   "id": "transcript",
+   "title": "evidence/TRANSCRIPT.md（可見對話逐字紀錄）",
+   "url": "../evidence/TRANSCRIPT.md",
+   "checked_at": "2026-10-10"
+  }
+ ],
+ "coverage": {
+  "origin": {
+   "summary": "原作業於 2026-10-09 20:56:22.451（Asia/Taipei）開始，使用者要求依 Rubric 批改十篇作文並產出 Word 與 PPT。",
+   "date": "2026-10-09",
+   "precision": "day",
+   "event_type": "原作業執行（task run）",
+   "source_ids": [
+    "usage",
+    "transcript"
+   ]
+  },
+  "principle": {
+   "summary": "工作流程：讀技能 → 沙箱失敗改升權 → 轉換來源 → 取得設計授權 → 評閱 → Word／PPT 製作與檢查。",
+   "source_ids": [
+    "timeline",
+    "handoff-record"
+   ]
+  },
+  "comparison": {
+   "summary": "同一份 30 則修改對照中，區分妨礙理解的文法錯誤（0 則）與可選的風格／精準化改善（30 則）；另比較原定工具與替代方案。",
+   "alternatives": [
+    "文法錯誤",
+    "風格／精準化改善"
+   ],
+   "dimensions": [
+    "是否妨礙理解",
+    "評語標籤",
+    "是否列入個人扣分"
+   ],
+   "conditions": "同一份 reviews.json、同一 Rubric、同一共用題目",
+   "time_sensitive": false,
+   "source_ids": [
+    "reviews",
+    "handoff-record"
+   ]
+  },
+  "application": {
+   "summary": "真實案例：十篇作文的評閱、Word 23 頁與 PPT 14 頁的製作，含十項錯誤與修復。",
+   "case_type": "real",
+   "source_ids": [
+    "timeline",
+    "errors",
+    "reviews"
+   ]
+  },
+  "outlook": {
+   "summary": "還原界線與交接：無桌面錄影；素材分 A／B／C；重建須依重現說明於獨立目錄執行。",
+   "claim_type": "inference",
+   "as_of": "2026-10-10",
+   "source_ids": [
+    "provenance",
+    "handoff-record"
+   ]
+  }
+ },
+ "timeline": {
+  "total": 1324.778,
+  "calls": [
+   {
+    "n": 1,
+    "offset": 8.204,
+    "error": true,
+    "time": "20:56:30.655"
+   },
+   {
+    "n": 2,
+    "offset": 13.052,
+    "error": false,
+    "time": "20:56:35.503"
+   },
+   {
+    "n": 3,
+    "offset": 15.514,
+    "error": false,
+    "time": "20:56:37.965"
+   },
+   {
+    "n": 4,
+    "offset": 23.226,
+    "error": true,
+    "time": "20:56:45.677"
+   },
+   {
+    "n": 5,
+    "offset": 29.089,
+    "error": false,
+    "time": "20:56:51.540"
+   },
+   {
+    "n": 6,
+    "offset": 48.748,
+    "error": false,
+    "time": "20:57:11.199"
+   },
+   {
+    "n": 7,
+    "offset": 73.944,
+    "error": false,
+    "time": "20:57:36.395"
+   },
+   {
+    "n": 8,
+    "offset": 92.974,
+    "error": false,
+    "time": "20:57:55.425"
+   },
+   {
+    "n": 9,
+    "offset": 111.529,
+    "error": false,
+    "time": "20:58:13.980"
+   },
+   {
+    "n": 10,
+    "offset": 136.184,
+    "error": false,
+    "time": "20:58:38.635"
+   },
+   {
+    "n": 11,
+    "offset": 157.583,
+    "error": false,
+    "time": "20:59:00.034"
+   },
+   {
+    "n": 12,
+    "offset": 182.331,
+    "error": false,
+    "time": "20:59:24.782"
+   },
+   {
+    "n": 13,
+    "offset": 203.598,
+    "error": false,
+    "time": "20:59:46.049"
+   },
+   {
+    "n": 14,
+    "offset": 219.263,
+    "error": false,
+    "time": "21:00:01.714"
+   },
+   {
+    "n": 15,
+    "offset": 373.252,
+    "error": true,
+    "time": "21:02:35.703"
+   },
+   {
+    "n": 16,
+    "offset": 393.245,
+    "error": false,
+    "time": "21:02:55.696"
+   },
+   {
+    "n": 17,
+    "offset": 413.599,
+    "error": false,
+    "time": "21:03:16.050"
+   },
+   {
+    "n": 18,
+    "offset": 515.721,
+    "error": true,
+    "time": "21:04:58.172"
+   },
+   {
+    "n": 19,
+    "offset": 551.828,
+    "error": false,
+    "time": "21:05:34.279"
+   },
+   {
+    "n": 20,
+    "offset": 665.817,
+    "error": false,
+    "time": "21:07:28.268"
+   },
+   {
+    "n": 21,
+    "offset": 686.094,
+    "error": false,
+    "time": "21:07:48.545"
+   },
+   {
+    "n": 22,
+    "offset": 798.048,
+    "error": true,
+    "time": "21:09:40.499"
+   },
+   {
+    "n": 23,
+    "offset": 819.734,
+    "error": false,
+    "time": "21:10:02.185"
+   },
+   {
+    "n": 24,
+    "offset": 837.821,
+    "error": false,
+    "time": "21:10:20.272"
+   },
+   {
+    "n": 25,
+    "offset": 927.081,
+    "error": true,
+    "time": "21:11:49.532"
+   },
+   {
+    "n": 26,
+    "offset": 993.858,
+    "error": false,
+    "time": "21:12:56.309"
+   },
+   {
+    "n": 27,
+    "offset": 1010.469,
+    "error": false,
+    "time": "21:13:12.920"
+   },
+   {
+    "n": 28,
+    "offset": 1085.298,
+    "error": false,
+    "time": "21:14:27.749"
+   },
+   {
+    "n": 29,
+    "offset": 1108.025,
+    "error": false,
+    "time": "21:14:50.476"
+   },
+   {
+    "n": 30,
+    "offset": 1138.703,
+    "error": false,
+    "time": "21:15:21.154"
+   },
+   {
+    "n": 31,
+    "offset": 1156.429,
+    "error": false,
+    "time": "21:15:38.880"
+   },
+   {
+    "n": 32,
+    "offset": 1195.6,
+    "error": true,
+    "time": "21:16:18.051"
+   },
+   {
+    "n": 33,
+    "offset": 1216.748,
+    "error": false,
+    "time": "21:16:39.199"
+   },
+   {
+    "n": 34,
+    "offset": 1233.756,
+    "error": false,
+    "time": "21:16:56.207"
+   },
+   {
+    "n": 35,
+    "offset": 1264.152,
+    "error": false,
+    "time": "21:17:26.603"
+   },
+   {
+    "n": 36,
+    "offset": 1269.961,
+    "error": false,
+    "time": "21:17:32.412"
+   },
+   {
+    "n": 37,
+    "offset": 1274.581,
+    "error": false,
+    "time": "21:17:37.032"
+   },
+   {
+    "n": 38,
+    "offset": 1279.254,
+    "error": false,
+    "time": "21:17:41.705"
+   },
+   {
+    "n": 39,
+    "offset": 1304.651,
+    "error": false,
+    "time": "21:18:07.102"
+   }
+  ]
+ },
+ "variants": {
+  "zh-TW": {
+   "mix": "audio/mix.m4a",
+   "scenes": [
+    {
+     "id": "s01",
+     "section": "origin",
+     "start": 0.0,
+     "end": 49.56666666666667,
+     "title": "任務與輸入",
+     "title_en": "The task and its inputs",
+     "section_label": [
+      "起源",
+      "ORIGIN"
+     ],
+     "screen": "原作業開始：2026-10-09 20:56:22.451（Asia/Taipei）",
+     "objective": "知道任務的起點、輸入與 Rubric 三向度",
+     "narration": "這支影片依照操作日誌，重建一次真實的批改工作。2026 年 10 月 9 日晚上 8 點 56 分，使用者請 Codex 依照 Rubric，批改十篇英文作文，把評論整理成 Word，再用 ppt-master 做成分析簡報。Rubric 有三個向度：結構與組織、內容與想法、文法與表達，各 1 到 5 分，總分 15 分。十篇都談線上課程增加的原因與影響，正文各四段。作文與 Rubric 在作業前就已存在，畫面時間都以原作業開始後的秒數標示。",
+     "phases": [
+      {
+       "name": "標題進場",
+       "start": 0.0,
+       "end": 1.922
+      },
+      {
+       "name": "句1",
+       "start": 1.922,
+       "end": 6.896
+      },
+      {
+       "name": "句2",
+       "start": 6.896,
+       "end": 11.932
+      },
+      {
+       "name": "句3",
+       "start": 11.932,
+       "end": 16.44
+      },
+      {
+       "name": "句4",
+       "start": 16.44,
+       "end": 22.593
+      },
+      {
+       "name": "句5",
+       "start": 22.593,
+       "end": 29.458
+      },
+      {
+       "name": "句6",
+       "start": 29.458,
+       "end": 33.146
+      },
+      {
+       "name": "句7",
+       "start": 33.146,
+       "end": 38.443
+      },
+      {
+       "name": "句8",
+       "start": 38.443,
+       "end": 49.56666666666667
+      }
+     ],
+     "qa_times": [
+      2.672,
+      7.646,
+      12.682,
+      17.19,
+      23.343,
+      30.208,
+      33.896,
+      39.193,
+      49.517
+     ],
+     "cues": [
+      {
+       "i": 0,
+       "start": 1.922,
+       "end": 6.393
+      },
+      {
+       "i": 1,
+       "start": 6.896,
+       "end": 11.456
+      },
+      {
+       "i": 2,
+       "start": 11.932,
+       "end": 16.127
+      },
+      {
+       "i": 3,
+       "start": 16.44,
+       "end": 21.953
+      },
+      {
+       "i": 4,
+       "start": 22.593,
+       "end": 29.056
+      },
+      {
+       "i": 5,
+       "start": 29.458,
+       "end": 32.618
+      },
+      {
+       "i": 6,
+       "start": 33.146,
+       "end": 37.949
+      },
+      {
+       "i": 7,
+       "start": 38.443,
+       "end": 45.578
+      }
+     ],
+     "log_clock": "20:56:22.451",
+     "log_offset": 0,
+     "log_end": 8.204,
+     "tools": [],
+     "index": 1,
+     "spoken_date": "2026 年 10 月 9 日"
+    },
+    {
+     "id": "s02",
+     "section": "principle",
+     "start": 49.56666666666667,
+     "end": 80.03333333333333,
+     "title": "讀取技能與啟動限制",
+     "title_en": "Reading the skills, hitting a startup limit",
+     "section_label": [
+      "原理",
+      "PRINCIPLE"
+     ],
+     "screen": "沙箱與 Node REPL 失敗 → 升權執行讀取 ppt-master 6.7.0",
+     "objective": "理解沙箱失敗與升權執行的差別",
+     "narration": "第一步是讀取技能說明，但一開始就失敗了。開始後 8 秒，第一次命令回報 Windows 沙箱啟動錯誤；改試 Node REPL，也因沙箱而失敗。第 29 秒改以升權方式執行，才讀到 ppt-master 6.7.0 的入口。這不是沙箱被修好，而是換了一條獲准的執行路徑。",
+     "phases": [
+      {
+       "name": "標題進場",
+       "start": 49.56666666666667,
+       "end": 50.71
+      },
+      {
+       "name": "句1",
+       "start": 50.71,
+       "end": 56.134
+      },
+      {
+       "name": "句2",
+       "start": 56.134,
+       "end": 61.123
+      },
+      {
+       "name": "句3",
+       "start": 61.123,
+       "end": 65.685
+      },
+      {
+       "name": "句4",
+       "start": 65.685,
+       "end": 73.136
+      },
+      {
+       "name": "句5",
+       "start": 73.136,
+       "end": 80.03333333333333
+      }
+     ],
+     "qa_times": [
+      51.46,
+      56.884,
+      61.873,
+      66.435,
+      73.886,
+      79.983
+     ],
+     "cues": [
+      {
+       "i": 0,
+       "start": 50.71,
+       "end": 55.165
+      },
+      {
+       "i": 1,
+       "start": 56.134,
+       "end": 60.506
+      },
+      {
+       "i": 2,
+       "start": 61.123,
+       "end": 64.607
+      },
+      {
+       "i": 3,
+       "start": 65.685,
+       "end": 72.397
+      },
+      {
+       "i": 4,
+       "start": 73.136,
+       "end": 77.495
+      }
+     ],
+     "log_clock": "20:56:30.655",
+     "log_offset": 8.204,
+     "log_end": 73.944,
+     "tools": [
+      "T001",
+      "T002",
+      "T003",
+      "T004",
+      "T005",
+      "T006"
+     ],
+     "index": 2
+    },
+    {
+     "id": "s03",
+     "section": "principle",
+     "start": 80.03333333333333,
+     "end": 112.8,
+     "title": "轉換資料與取得授權",
+     "title_en": "Converting sources, getting authorization",
+     "section_label": [
+      "原理",
+      "PRINCIPLE"
+     ],
+     "screen": "11/11 DOCX 轉換成功；20:59:33.937 使用者授權",
+     "objective": "看到資料轉換與使用者授權的真實時點",
+     "narration": "接著讀出 Rubric 表格與十篇全文，並把十一份 DOCX 轉成 Markdown，全部成功。ppt-master 規定設計要經使用者確認，除非明確授權。第 2 分 38 秒，Codex 提出詢問；34 秒後，使用者回覆「授權你決定並完成」。之後才選定「評閱稿」方向，固定為十四頁。",
+     "phases": [
+      {
+       "name": "標題進場",
+       "start": 80.03333333333333,
+       "end": 81.211
+      },
+      {
+       "name": "句1",
+       "start": 81.211,
+       "end": 85.184
+      },
+      {
+       "name": "句2",
+       "start": 85.184,
+       "end": 91.114
+      },
+      {
+       "name": "句3",
+       "start": 91.114,
+       "end": 97.526
+      },
+      {
+       "name": "句4",
+       "start": 97.526,
+       "end": 100.897
+      },
+      {
+       "name": "句5",
+       "start": 100.897,
+       "end": 106.001
+      },
+      {
+       "name": "句6",
+       "start": 106.001,
+       "end": 112.8
+      }
+     ],
+     "qa_times": [
+      81.961,
+      85.934,
+      91.864,
+      98.276,
+      101.647,
+      106.751,
+      112.75
+     ],
+     "cues": [
+      {
+       "i": 0,
+       "start": 81.211,
+       "end": 84.483
+      },
+      {
+       "i": 1,
+       "start": 85.184,
+       "end": 89.395
+      },
+      {
+       "i": 2,
+       "start": 91.114,
+       "end": 96.267
+      },
+      {
+       "i": 3,
+       "start": 97.526,
+       "end": 100.145
+      },
+      {
+       "i": 4,
+       "start": 100.897,
+       "end": 105.159
+      },
+      {
+       "i": 5,
+       "start": 106.001,
+       "end": 109.8
+      }
+     ],
+     "log_clock": "20:57:36.395",
+     "log_offset": 73.944,
+     "log_end": 203.598,
+     "tools": [
+      "T007",
+      "T008",
+      "T009",
+      "T010",
+      "T011",
+      "T012"
+     ],
+     "index": 3
+    },
+    {
+     "id": "s04",
+     "section": "application",
+     "start": 112.8,
+     "end": 157.8,
+     "title": "逐篇評閱",
+     "title_en": "Grading essay by essay",
+     "section_label": [
+      "案例",
+      "CASE"
+     ],
+     "screen": "ps[3:] 斷言失敗 → ps[2:]；平均 13.4／15",
+     "objective": "理解評分由誰判斷，以及段落索引錯誤如何被修正",
+     "narration": "分數由 Codex 讀完全文後判斷，Python 只負責核對引用和計算。建立評閱資料時，程式假設姓名另成一段，正文少取一段，斷言失敗。檢查原稿後發現，學校、姓名和學號在同一段內換行；改正索引後，三十處原句全部對上。結果平均 13.4 分，中位數 13 分；三項平均 4.2、4.3、4.9。十篇分數落在 12 到 15 分之間。這是建議評分，不是唯一正解。",
+     "phases": [
+      {
+       "name": "標題進場",
+       "start": 112.8,
+       "end": 113.98
+      },
+      {
+       "name": "句1",
+       "start": 113.98,
+       "end": 121.1
+      },
+      {
+       "name": "句2",
+       "start": 121.1,
+       "end": 128.068
+      },
+      {
+       "name": "句3",
+       "start": 128.068,
+       "end": 134.876
+      },
+      {
+       "name": "句4",
+       "start": 134.876,
+       "end": 138.644
+      },
+      {
+       "name": "句5",
+       "start": 138.644,
+       "end": 147.988
+      },
+      {
+       "name": "句6",
+       "start": 147.988,
+       "end": 151.432
+      },
+      {
+       "name": "句7",
+       "start": 151.432,
+       "end": 157.8
+      }
+     ],
+     "qa_times": [
+      114.73,
+      121.85,
+      128.818,
+      135.626,
+      139.394,
+      148.738,
+      152.182,
+      157.75
+     ],
+     "cues": [
+      {
+       "i": 0,
+       "start": 113.98,
+       "end": 120.638
+      },
+      {
+       "i": 1,
+       "start": 121.1,
+       "end": 127.583
+      },
+      {
+       "i": 2,
+       "start": 128.068,
+       "end": 134.337
+      },
+      {
+       "i": 3,
+       "start": 134.876,
+       "end": 137.87
+      },
+      {
+       "i": 4,
+       "start": 138.644,
+       "end": 147.32
+      },
+      {
+       "i": 5,
+       "start": 147.988,
+       "end": 150.788
+      },
+      {
+       "i": 6,
+       "start": 151.432,
+       "end": 154.311
+      }
+     ],
+     "log_clock": "20:59:46.049",
+     "log_offset": 203.598,
+     "log_end": 413.599,
+     "tools": [
+      "T013",
+      "T014",
+      "T015",
+      "T016",
+      "T017"
+     ],
+     "index": 4
+    },
+    {
+     "id": "s05",
+     "section": "comparison",
+     "start": 157.8,
+     "end": 202.4,
+     "title": "文法錯誤與風格改善",
+     "title_en": "Grammar errors vs. style improvements",
+     "section_label": [
+      "比較",
+      "COMPARISON"
+     ],
+     "screen": "30 則修改：表達優化 22、其他精準化 8、文法錯誤 0",
+     "objective": "分辨文法錯誤與可選的風格改善",
+     "narration": "這份評閱刻意區分兩件事：妨礙理解的文法錯誤，和可選的風格改善。三十則修改對照中，二十二則標為表達優化，其餘八則是搭配、範圍、概念、論述、語體與因果的修訂，沒有一則被標成文法錯誤。例如把 Online long-distance courses 精簡成 Online courses，評語寫明：原寫法並非嚴重文法錯誤。共用題目裡的 course 單數與 increase of，十篇都一樣，所以統一說明，不算個人扣分。",
+     "phases": [
+      {
+       "name": "標題進場",
+       "start": 157.8,
+       "end": 158.962
+      },
+      {
+       "name": "句1",
+       "start": 158.962,
+       "end": 162.039
+      },
+      {
+       "name": "句2",
+       "start": 162.039,
+       "end": 166.75
+      },
+      {
+       "name": "句3",
+       "start": 166.75,
+       "end": 171.011
+      },
+      {
+       "name": "句4",
+       "start": 171.011,
+       "end": 178.656
+      },
+      {
+       "name": "句5",
+       "start": 178.656,
+       "end": 181.565
+      },
+      {
+       "name": "句6",
+       "start": 181.565,
+       "end": 186.79
+      },
+      {
+       "name": "句7",
+       "start": 186.79,
+       "end": 190.862
+      },
+      {
+       "name": "句8",
+       "start": 190.862,
+       "end": 195.615
+      },
+      {
+       "name": "句9",
+       "start": 195.615,
+       "end": 202.4
+      }
+     ],
+     "qa_times": [
+      159.712,
+      162.789,
+      167.5,
+      171.761,
+      179.406,
+      182.315,
+      187.54,
+      191.612,
+      196.365,
+      202.35
+     ],
+     "cues": [
+      {
+       "i": 0,
+       "start": 158.962,
+       "end": 161.207
+      },
+      {
+       "i": 1,
+       "start": 162.039,
+       "end": 165.467
+      },
+      {
+       "i": 2,
+       "start": 166.75,
+       "end": 170.383
+      },
+      {
+       "i": 3,
+       "start": 171.011,
+       "end": 178.038
+      },
+      {
+       "i": 4,
+       "start": 178.656,
+       "end": 180.552
+      },
+      {
+       "i": 5,
+       "start": 181.565,
+       "end": 186.181
+      },
+      {
+       "i": 6,
+       "start": 186.79,
+       "end": 189.727
+      },
+      {
+       "i": 7,
+       "start": 190.862,
+       "end": 195.27
+      },
+      {
+       "i": 8,
+       "start": 195.615,
+       "end": 198.014
+      }
+     ],
+     "log_clock": "21:03:16.050",
+     "log_offset": 413.599,
+     "log_end": 515.721,
+     "tools": [
+      "T017"
+     ],
+     "index": 5
+    },
+    {
+     "id": "s06",
+     "section": "application",
+     "start": 202.4,
+     "end": 231.7,
+     "title": "Word 初次輸出",
+     "title_en": "The first Word output",
+     "section_label": [
+      "案例",
+      "CASE"
+     ],
+     "screen": "LibreOffice 缺失 → Word COM 背景匯出 PDF",
+     "objective": "理解環境替代方案，不把背景匯出誤認為手動操作",
+     "narration": "第 8 分 36 秒，Word 報告產生了，但標準轉圖工具找不到 LibreOffice 的 soffice.exe，渲染失敗。替代做法是由命令在背景以 Word COM 唯讀開啟，匯出 PDF，再轉成圖片檢查。這是命令觸發的背景匯出，不是有人在 Word 裡按下匯出。",
+     "phases": [
+      {
+       "name": "標題進場",
+       "start": 202.4,
+       "end": 203.649
+      },
+      {
+       "name": "句1",
+       "start": 203.649,
+       "end": 207.647
+      },
+      {
+       "name": "句2",
+       "start": 207.647,
+       "end": 214.951
+      },
+      {
+       "name": "句3",
+       "start": 214.951,
+       "end": 224.381
+      },
+      {
+       "name": "句4",
+       "start": 224.381,
+       "end": 231.7
+      }
+     ],
+     "qa_times": [
+      204.399,
+      208.397,
+      215.701,
+      225.131,
+      231.65
+     ],
+     "cues": [
+      {
+       "i": 0,
+       "start": 203.649,
+       "end": 206.934
+      },
+      {
+       "i": 1,
+       "start": 207.647,
+       "end": 213.898
+      },
+      {
+       "i": 2,
+       "start": 214.951,
+       "end": 223.456
+      },
+      {
+       "i": 3,
+       "start": 224.381,
+       "end": 229.443
+      }
+     ],
+     "log_clock": "21:04:58.172",
+     "log_offset": 515.721,
+     "log_end": 665.817,
+     "tools": [
+      "T018",
+      "T019"
+     ],
+     "index": 6
+    },
+    {
+     "id": "s07",
+     "section": "application",
+     "start": 231.7,
+     "end": 277.5,
+     "title": "簡報規格與前五頁",
+     "title_en": "Deck spec and the first five slides",
+     "section_label": [
+      "案例",
+      "CASE"
+     ],
+     "screen": "14 頁規格鎖定；slide-number → page-number；fitz → pypdfium2",
+     "objective": "看懂簡報規格與早期檢查的兩項提示",
+     "narration": "簡報規格鎖定為十四頁、1280×720 畫布，暖白底配深青標題。數據以可編輯的數字文字呈現，不是圖表物件，所以沒有啟動圖表驗證。手寫前五頁 SVG 後，早期檢查出現提示：頁碼角色誤寫成 slide-number，第二頁的文字超出群組下緣。同一步也發現環境缺少 fitz 套件。改成 page-number、加大下緣後，前五頁零警告；PDF 轉圖則改用已有的 pypdfium2。",
+     "phases": [
+      {
+       "name": "標題進場",
+       "start": 231.7,
+       "end": 232.818
+      },
+      {
+       "name": "句1",
+       "start": 232.818,
+       "end": 241.583
+      },
+      {
+       "name": "句2",
+       "start": 241.583,
+       "end": 249.269
+      },
+      {
+       "name": "句3",
+       "start": 249.269,
+       "end": 254.032
+      },
+      {
+       "name": "句4",
+       "start": 254.032,
+       "end": 260.188
+      },
+      {
+       "name": "句5",
+       "start": 260.188,
+       "end": 264.199
+      },
+      {
+       "name": "句6",
+       "start": 264.199,
+       "end": 269.609
+      },
+      {
+       "name": "句7",
+       "start": 269.609,
+       "end": 277.5
+      }
+     ],
+     "qa_times": [
+      233.568,
+      242.333,
+      250.019,
+      254.782,
+      260.938,
+      264.949,
+      270.359,
+      277.45
+     ],
+     "cues": [
+      {
+       "i": 0,
+       "start": 232.818,
+       "end": 240.588
+      },
+      {
+       "i": 1,
+       "start": 241.583,
+       "end": 248.131
+      },
+      {
+       "i": 2,
+       "start": 249.269,
+       "end": 253.086
+      },
+      {
+       "i": 3,
+       "start": 254.032,
+       "end": 259.447
+      },
+      {
+       "i": 4,
+       "start": 260.188,
+       "end": 263.164
+      },
+      {
+       "i": 5,
+       "start": 264.199,
+       "end": 268.805
+      },
+      {
+       "i": 6,
+       "start": 269.609,
+       "end": 273.98
+      }
+     ],
+     "log_clock": "21:07:28.268",
+     "log_offset": 665.817,
+     "log_end": 927.081,
+     "tools": [
+      "T020",
+      "T021",
+      "T022",
+      "T023",
+      "T024"
+     ],
+     "index": 7
+    },
+    {
+     "id": "s08",
+     "section": "application",
+     "start": 277.5,
+     "end": 310.3,
+     "title": "語法失敗與 Word 分頁",
+     "title_en": "A syntax failure and Word page breaks",
+     "section_label": [
+      "案例",
+      "CASE"
+     ],
+     "screen": "SyntaxError → String.raw；run.text 破壞分頁 → 條件重設",
+     "objective": "理解外層語法失敗與 Word 分頁被破壞的原因",
+     "narration": "第 15 分 27 秒，一次外層 JavaScript 指令出現 SyntaxError，內層命令根本沒有執行。改用 String.raw 重送相同內容，完成第六到第十頁。接著處理 Word 只有十九頁的原因：清理文字時無條件重設 run.text，把分頁符號變成一般換行。改成只有字元真的改變時才重設。",
+     "phases": [
+      {
+       "name": "標題進場",
+       "start": 277.5,
+       "end": 278.662
+      },
+      {
+       "name": "句1",
+       "start": 278.662,
+       "end": 285.245
+      },
+      {
+       "name": "句2",
+       "start": 285.245,
+       "end": 287.986
+      },
+      {
+       "name": "句3",
+       "start": 287.986,
+       "end": 294.16
+      },
+      {
+       "name": "句4",
+       "start": 294.16,
+       "end": 297.614
+      },
+      {
+       "name": "句5",
+       "start": 297.614,
+       "end": 304.444
+      },
+      {
+       "name": "句6",
+       "start": 304.444,
+       "end": 310.3
+      }
+     ],
+     "qa_times": [
+      279.412,
+      285.995,
+      288.736,
+      294.91,
+      298.364,
+      305.194,
+      310.25
+     ],
+     "cues": [
+      {
+       "i": 0,
+       "start": 278.662,
+       "end": 284.605
+      },
+      {
+       "i": 1,
+       "start": 285.245,
+       "end": 287.195
+      },
+      {
+       "i": 2,
+       "start": 287.986,
+       "end": 292.877
+      },
+      {
+       "i": 3,
+       "start": 294.16,
+       "end": 296.83
+      },
+      {
+       "i": 4,
+       "start": 297.614,
+       "end": 303.502
+      },
+      {
+       "i": 5,
+       "start": 304.444,
+       "end": 307.292
+      }
+     ],
+     "log_clock": "21:11:49.532",
+     "log_offset": 927.081,
+     "log_end": 1085.298,
+     "tools": [
+      "T025",
+      "T026",
+      "T027"
+     ],
+     "index": 8
+    },
+    {
+     "id": "s09",
+     "section": "application",
+     "start": 310.3,
+     "end": 345.3666666666667,
+     "title": "十四頁完成，Word 變二十四頁",
+     "title_en": "14 slides done; Word grows to 24 pages",
+     "section_label": [
+      "案例",
+      "CASE"
+     ],
+     "screen": "SVG 14/14 通過；Word 24 頁（空白頁、標題藍線）",
+     "objective": "看到最終檢查提示與 24 頁中間版的證據",
+     "narration": "第 18 分 05 秒，最後四頁完成。最終檢查還有兩項提示：第十一頁群組下緣不足，第十四頁有重複的字級屬性；修正後，十四頁全部通過、零警告。但 Word 這版變成二十四頁：多了一頁空白，標題還帶著預設的藍色下框線。當時回傳的頁面圖裡，01 號的評閱被推到第五頁。",
+     "phases": [
+      {
+       "name": "標題進場",
+       "start": 310.3,
+       "end": 311.442
+      },
+      {
+       "name": "句1",
+       "start": 311.442,
+       "end": 315.355
+      },
+      {
+       "name": "句2",
+       "start": 315.355,
+       "end": 324.638
+      },
+      {
+       "name": "句3",
+       "start": 324.638,
+       "end": 329.538
+      },
+      {
+       "name": "句4",
+       "start": 329.538,
+       "end": 338.189
+      },
+      {
+       "name": "句5",
+       "start": 338.189,
+       "end": 345.3666666666667
+      }
+     ],
+     "qa_times": [
+      312.192,
+      316.105,
+      325.388,
+      330.288,
+      338.939,
+      345.317
+     ],
+     "cues": [
+      {
+       "i": 0,
+       "start": 311.442,
+       "end": 314.527
+      },
+      {
+       "i": 1,
+       "start": 315.355,
+       "end": 323.697
+      },
+      {
+       "i": 2,
+       "start": 324.638,
+       "end": 328.271
+      },
+      {
+       "i": 3,
+       "start": 329.538,
+       "end": 336.984
+      },
+      {
+       "i": 4,
+       "start": 338.189,
+       "end": 342.75
+      }
+     ],
+     "log_clock": "21:14:27.749",
+     "log_offset": 1085.298,
+     "log_end": 1156.429,
+     "tools": [
+      "T028",
+      "T029",
+      "T030"
+     ],
+     "index": 9
+    },
+    {
+     "id": "s10",
+     "section": "application",
+     "start": 345.3666666666667,
+     "end": 379.03333333333336,
+     "title": "修復版面與檔案鎖定",
+     "title_en": "Fixing the layout; a file lock",
+     "section_label": [
+      "案例",
+      "CASE"
+     ],
+     "screen": "Word 回到 23 頁；WinError 32 重試成功",
+     "objective": "看懂版面修正前後與檔案鎖定的不確定性",
+     "narration": "修正方法是刪除標題的段落框線，縮小檔案對照表的字級與段後距。Word 回到二十三頁，01 號評閱回到第四頁。SVG 定稿時又遇到 WinError 32：資料夾被另一個程序占用。日誌沒有記錄是哪個程序，同步軟體只是推測；重試一次就成功了。",
+     "phases": [
+      {
+       "name": "標題進場",
+       "start": 345.3666666666667,
+       "end": 346.575
+      },
+      {
+       "name": "句1",
+       "start": 346.575,
+       "end": 355.726
+      },
+      {
+       "name": "句2",
+       "start": 355.726,
+       "end": 361.614
+      },
+      {
+       "name": "句3",
+       "start": 361.614,
+       "end": 369.337
+      },
+      {
+       "name": "句4",
+       "start": 369.337,
+       "end": 374.787
+      },
+      {
+       "name": "句5",
+       "start": 374.787,
+       "end": 379.03333333333336
+      }
+     ],
+     "qa_times": [
+      347.325,
+      356.476,
+      362.364,
+      370.087,
+      375.537,
+      378.983
+     ],
+     "cues": [
+      {
+       "i": 0,
+       "start": 346.575,
+       "end": 354.488
+      },
+      {
+       "i": 1,
+       "start": 355.726,
+       "end": 360.297
+      },
+      {
+       "i": 2,
+       "start": 361.614,
+       "end": 368.328
+      },
+      {
+       "i": 3,
+       "start": 369.337,
+       "end": 373.688
+      },
+      {
+       "i": 4,
+       "start": 374.787,
+       "end": 376.395
+      }
+     ],
+     "log_clock": "21:15:38.880",
+     "log_offset": 1156.429,
+     "log_end": 1233.756,
+     "tools": [
+      "T031",
+      "T032",
+      "T033"
+     ],
+     "index": 10
+    },
+    {
+     "id": "s11",
+     "section": "application",
+     "start": 379.03333333333336,
+     "end": 408.4,
+     "title": "原生匯出與最終檢視",
+     "title_en": "Native export and final review",
+     "section_label": [
+      "案例",
+      "CASE"
+     ],
+     "screen": "原生 PPTX 匯出 postflight passed；Word 23 頁逐頁查看",
+     "objective": "分清原作業檢查範圍與交接後補製預覽",
+     "narration": "第 20 分 34 秒，以不含講者備註、不含動畫的設定，匯出原生可編輯的 PowerPoint；postflight 與 quality gate 都通過。接著分四批，逐頁查看 Word 最終二十三頁。原作業並沒有在 PowerPoint 裡逐頁觀看；畫面上的投影片圖，是隔天交接時才補製的預覽。",
+     "phases": [
+      {
+       "name": "標題進場",
+       "start": 379.03333333333336,
+       "end": 380.211
+      },
+      {
+       "name": "句1",
+       "start": 380.211,
+       "end": 385.914
+      },
+      {
+       "name": "句2",
+       "start": 385.914,
+       "end": 393.013
+      },
+      {
+       "name": "句3",
+       "start": 393.013,
+       "end": 397.937
+      },
+      {
+       "name": "句4",
+       "start": 397.937,
+       "end": 401.597
+      },
+      {
+       "name": "句5",
+       "start": 401.597,
+       "end": 408.4
+      }
+     ],
+     "qa_times": [
+      380.961,
+      386.664,
+      393.763,
+      398.687,
+      402.347,
+      408.35
+     ],
+     "cues": [
+      {
+       "i": 0,
+       "start": 380.211,
+       "end": 385.356
+      },
+      {
+       "i": 1,
+       "start": 385.914,
+       "end": 391.782
+      },
+      {
+       "i": 2,
+       "start": 393.013,
+       "end": 396.839
+      },
+      {
+       "i": 3,
+       "start": 397.937,
+       "end": 400.497
+      },
+      {
+       "i": 4,
+       "start": 401.597,
+       "end": 405.793
+      }
+     ],
+     "log_clock": "21:16:56.207",
+     "log_offset": 1233.756,
+     "log_end": 1304.651,
+     "tools": [
+      "T034",
+      "T035",
+      "T036",
+      "T037",
+      "T038"
+     ],
+     "index": 11
+    },
+    {
+     "id": "s12",
+     "section": "application",
+     "start": 408.4,
+     "end": 473.0,
+     "title": "結果與用量",
+     "title_en": "Results and usage",
+     "section_label": [
+      "案例",
+      "CASE"
+     ],
+     "screen": "22 分 4.778 秒；4,791,087 tokens；額度為共享快照",
+     "objective": "正確解讀時間、token 與額度數字",
+     "narration": "最後驗證：十篇作文、三十則修改、Word 二十三頁、簡報十四頁。日誌記錄的總長是 22 分 4.778 秒。累計約四百七十九萬 tokens，其中九成六是快取重用的輸入，輸出只有三萬五千多。這是多輪重讀上下文的計量，不是生成了四百多萬字。快取已包含在輸入中，不能再加一次；推理輸出也只是分類計數。帳戶五小時額度從 13% 變成 91%，週額度從 52% 變成 64%。這是共享帳戶的快照，只能說期間觀察到增加，不能全部歸給這個任務。第一筆額度快照在開始後 9 秒才取得，金額成本則沒有資料。",
+     "phases": [
+      {
+       "name": "標題進場",
+       "start": 408.4,
+       "end": 409.612
+      },
+      {
+       "name": "句1",
+       "start": 409.612,
+       "end": 418.129
+      },
+      {
+       "name": "句2",
+       "start": 418.129,
+       "end": 423.135
+      },
+      {
+       "name": "句3",
+       "start": 423.135,
+       "end": 429.938
+      },
+      {
+       "name": "句4",
+       "start": 429.938,
+       "end": 432.94
+      },
+      {
+       "name": "句5",
+       "start": 432.94,
+       "end": 438.752
+      },
+      {
+       "name": "句6",
+       "start": 438.752,
+       "end": 446.167
+      },
+      {
+       "name": "句7",
+       "start": 446.167,
+       "end": 455.633
+      },
+      {
+       "name": "句8",
+       "start": 455.633,
+       "end": 462.852
+      },
+      {
+       "name": "句9",
+       "start": 462.852,
+       "end": 473.0
+      }
+     ],
+     "qa_times": [
+      410.362,
+      418.879,
+      423.885,
+      430.688,
+      433.69,
+      439.502,
+      446.917,
+      456.383,
+      463.602,
+      472.95
+     ],
+     "cues": [
+      {
+       "i": 0,
+       "start": 409.612,
+       "end": 416.927
+      },
+      {
+       "i": 1,
+       "start": 418.129,
+       "end": 422.181
+      },
+      {
+       "i": 2,
+       "start": 423.135,
+       "end": 429.25
+      },
+      {
+       "i": 3,
+       "start": 429.938,
+       "end": 431.718
+      },
+      {
+       "i": 4,
+       "start": 432.94,
+       "end": 437.437
+      },
+      {
+       "i": 5,
+       "start": 438.752,
+       "end": 444.662
+      },
+      {
+       "i": 6,
+       "start": 446.167,
+       "end": 454.669
+      },
+      {
+       "i": 7,
+       "start": 455.633,
+       "end": 461.846
+      },
+      {
+       "i": 8,
+       "start": 462.852,
+       "end": 468.603
+      }
+     ],
+     "log_clock": "21:18:07.102",
+     "log_offset": 1304.651,
+     "log_end": 1324.778,
+     "tools": [
+      "T039"
+     ],
+     "index": 12
+    },
+    {
+     "id": "s13",
+     "section": "outlook",
+     "start": 473.0,
+     "end": 517.0,
+     "title": "還原界線與交接",
+     "title_en": "Limits of this reconstruction",
+     "section_label": [
+      "展望",
+      "OUTLOOK"
+     ],
+     "screen": "依日誌重建；A 當時回傳／B 最終保存／C 交接補製",
+     "objective": "知道本片的還原界線與可回查證據",
+     "narration": "這支影片沒有原始桌面錄影，也沒有滑鼠軌跡或點擊座標。命令卡和時間卡都依操作日誌重建；文件圖分成當時回傳、最終保存，與交接補製三種。原作業的簡報本身沒有旁白、動畫和講者備註。需要重建成品時，應依重現說明在獨立目錄執行，不能直接重跑保留下來的失敗命令。值得帶走的是：失敗被保留下來，每一次修正都有證據可以回查。",
+     "phases": [
+      {
+       "name": "標題進場",
+       "start": 473.0,
+       "end": 474.173
+      },
+      {
+       "name": "句1",
+       "start": 474.173,
+       "end": 480.725
+      },
+      {
+       "name": "句2",
+       "start": 480.725,
+       "end": 485.026
+      },
+      {
+       "name": "句3",
+       "start": 485.026,
+       "end": 491.945
+      },
+      {
+       "name": "句4",
+       "start": 491.945,
+       "end": 497.336
+      },
+      {
+       "name": "句5",
+       "start": 497.336,
+       "end": 507.887
+      },
+      {
+       "name": "句6",
+       "start": 507.887,
+       "end": 517.0
+      }
+     ],
+     "qa_times": [
+      474.923,
+      481.475,
+      485.776,
+      492.695,
+      498.086,
+      508.637,
+      516.95
+     ],
+     "cues": [
+      {
+       "i": 0,
+       "start": 474.173,
+       "end": 479.549
+      },
+      {
+       "i": 1,
+       "start": 480.725,
+       "end": 483.872
+      },
+      {
+       "i": 2,
+       "start": 485.026,
+       "end": 491.185
+      },
+      {
+       "i": 3,
+       "start": 491.945,
+       "end": 496.369
+      },
+      {
+       "i": 4,
+       "start": 497.336,
+       "end": 506.196
+      },
+      {
+       "i": 5,
+       "start": 507.887,
+       "end": 513.948
+      }
+     ],
+     "log_clock": null,
+     "log_offset": null,
+     "log_end": null,
+     "tools": [],
+     "index": 13
+    },
+    {
+     "id": "credit",
+     "section": "credit",
+     "start": 517.0,
+     "end": 520.0,
+     "title": "",
+     "title_en": "",
+     "section_label": [
+      "",
+      ""
+     ],
+     "screen": "李振偉老師",
+     "narration": "",
+     "phases": [
+      {
+       "name": "署名",
+       "start": 517.0,
+       "end": 520.0
+      }
+     ],
+     "qa_times": [
+      518.5
+     ],
+     "cues": [],
+     "tools": [],
+     "log_offset": null,
+     "log_end": null
+    }
+   ],
+   "subtitles": {
+    "reviewed": true,
+    "timing_source": "Gemini TTS 實際音訊 → faster-whisper small 字詞時間碼對照定稿 + ffmpeg silencedetect 停頓；逐句檢視紀錄見 voice/timing-review.json",
+    "cues": [
+     {
+      "start": 1.922,
+      "end": 6.896,
+      "text": [
+       "這支影片依照操作日誌，重建一次真實的批改工作。",
+       "This video rebuilds a real grading session from its operation log."
+      ],
+      "scene": "s01",
+      "cue": 0
+     },
+     {
+      "start": 6.896,
+      "end": 11.932,
+      "text": [
+       "2026 年 10 月 9 日晚上 8 點 56 分，",
+       "At 8:56 p.m. on October 9, 2026,"
+      ],
+      "scene": "s01",
+      "cue": 1
+     },
+     {
+      "start": 11.932,
+      "end": 16.44,
+      "text": [
+       "使用者請 Codex 依照 Rubric，批改十篇英文作文，",
+       "a user asked Codex to grade ten English essays against a rubric,"
+      ],
+      "scene": "s01",
+      "cue": 2
+     },
+     {
+      "start": 16.44,
+      "end": 22.593,
+      "text": [
+       "把評論整理成 Word，再用 ppt-master 做成分析簡報。",
+       "collect the feedback in Word, and build an analysis deck with ppt-master."
+      ],
+      "scene": "s01",
+      "cue": 3
+     },
+     {
+      "start": 22.593,
+      "end": 29.458,
+      "text": [
+       "Rubric 有三個向度：結構與組織、內容與想法、文法與表達，",
+       "The rubric has three dimensions: structure, content, and grammar and expression,"
+      ],
+      "scene": "s01",
+      "cue": 4
+     },
+     {
+      "start": 29.458,
+      "end": 33.146,
+      "text": [
+       "各 1 到 5 分，總分 15 分。",
+       "each scored 1 to 5, for a total of 15."
+      ],
+      "scene": "s01",
+      "cue": 5
+     },
+     {
+      "start": 33.146,
+      "end": 38.443,
+      "text": [
+       "十篇都談線上課程增加的原因與影響，正文各四段。",
+       "All ten discuss why online courses are growing and what changes, in four body paragraphs each."
+      ],
+      "scene": "s01",
+      "cue": 6
+     },
+     {
+      "start": 38.443,
+      "end": 45.928,
+      "text": [
+       "作文與 Rubric 在作業前就已存在，畫面時間都以原作業開始後的秒數標示。",
+       "The essays and rubric existed before the run; times on screen count seconds from the start of the original run."
+      ],
+      "scene": "s01",
+      "cue": 7
+     },
+     {
+      "start": 50.71,
+      "end": 55.365,
+      "text": [
+       "第一步是讀取技能說明，但一開始就失敗了。",
+       "Step one was reading the skill instructions, and it failed immediately."
+      ],
+      "scene": "s02",
+      "cue": 0
+     },
+     {
+      "start": 56.134,
+      "end": 61.123,
+      "text": [
+       "開始後 8 秒，第一次命令回報 Windows 沙箱啟動錯誤；",
+       "Eight seconds in, the first command reported a Windows sandbox startup error;"
+      ],
+      "scene": "s02",
+      "cue": 1
+     },
+     {
+      "start": 61.123,
+      "end": 64.807,
+      "text": [
+       "改試 Node REPL，也因沙箱而失敗。",
+       "the Node REPL failed on the sandbox as well."
+      ],
+      "scene": "s02",
+      "cue": 2
+     },
+     {
+      "start": 65.685,
+      "end": 73.136,
+      "text": [
+       "第 29 秒改以升權方式執行，才讀到 ppt-master 6.7.0 的入口。",
+       "At 29 seconds, an escalated run finally read the ppt-master 6.7.0 entry point."
+      ],
+      "scene": "s02",
+      "cue": 3
+     },
+     {
+      "start": 73.136,
+      "end": 77.845,
+      "text": [
+       "這不是沙箱被修好，而是換了一條獲准的執行路徑。",
+       "The sandbox was not fixed; the work moved to a permitted execution path."
+      ],
+      "scene": "s02",
+      "cue": 4
+     },
+     {
+      "start": 81.211,
+      "end": 85.184,
+      "text": [
+       "接著讀出 Rubric 表格與十篇全文，",
+       "Next it read the rubric table and all ten essays,"
+      ],
+      "scene": "s03",
+      "cue": 0
+     },
+     {
+      "start": 85.184,
+      "end": 89.595,
+      "text": [
+       "並把十一份 DOCX 轉成 Markdown，全部成功。",
+       "and converted eleven DOCX files to Markdown, all successfully."
+      ],
+      "scene": "s03",
+      "cue": 1
+     },
+     {
+      "start": 91.114,
+      "end": 96.467,
+      "text": [
+       "ppt-master 規定設計要經使用者確認，除非明確授權。",
+       "ppt-master requires user confirmation of the design unless explicitly delegated."
+      ],
+      "scene": "s03",
+      "cue": 2
+     },
+     {
+      "start": 97.526,
+      "end": 100.897,
+      "text": [
+       "第 2 分 38 秒，Codex 提出詢問；",
+       "At 2:38, Codex asked;"
+      ],
+      "scene": "s03",
+      "cue": 3
+     },
+     {
+      "start": 100.897,
+      "end": 105.359,
+      "text": [
+       "34 秒後，使用者回覆「授權你決定並完成」。",
+       "34 seconds later the user replied: \"I authorize you to decide and finish.\""
+      ],
+      "scene": "s03",
+      "cue": 4
+     },
+     {
+      "start": 106.001,
+      "end": 110.15,
+      "text": [
+       "之後才選定「評閱稿」方向，固定為十四頁。",
+       "Only then was the \"review draft\" direction chosen, fixed at 14 slides."
+      ],
+      "scene": "s03",
+      "cue": 5
+     },
+     {
+      "start": 113.98,
+      "end": 121.1,
+      "text": [
+       "分數由 Codex 讀完全文後判斷，Python 只負責核對引用和計算。",
+       "Scores were Codex's judgment after reading each essay; Python only checked quotations and arithmetic."
+      ],
+      "scene": "s04",
+      "cue": 0
+     },
+     {
+      "start": 121.1,
+      "end": 128.068,
+      "text": [
+       "建立評閱資料時，程式假設姓名另成一段，正文少取一段，斷言失敗。",
+       "Building the review data, the script assumed the name was its own paragraph, took one paragraph too few, and an assertion failed."
+      ],
+      "scene": "s04",
+      "cue": 1
+     },
+     {
+      "start": 128.068,
+      "end": 134.876,
+      "text": [
+       "檢查原稿後發現，學校、姓名和學號在同一段內換行；",
+       "The source showed school, name, and student ID share one paragraph with line breaks;"
+      ],
+      "scene": "s04",
+      "cue": 2
+     },
+     {
+      "start": 134.876,
+      "end": 138.644,
+      "text": [
+       "改正索引後，三十處原句全部對上。",
+       "after fixing the index, all thirty quoted sentences matched."
+      ],
+      "scene": "s04",
+      "cue": 3
+     },
+     {
+      "start": 138.644,
+      "end": 147.988,
+      "text": [
+       "結果平均 13.4 分，中位數 13 分；三項平均 4.2、4.3、4.9。",
+       "The mean was 13.4 and the median 13; dimension means were 4.2, 4.3, and 4.9."
+      ],
+      "scene": "s04",
+      "cue": 4
+     },
+     {
+      "start": 147.988,
+      "end": 151.432,
+      "text": [
+       "十篇分數落在 12 到 15 分之間。",
+       "All ten scores fall between 12 and 15."
+      ],
+      "scene": "s04",
+      "cue": 5
+     },
+     {
+      "start": 151.432,
+      "end": 154.661,
+      "text": [
+       "這是建議評分，不是唯一正解。",
+       "These are suggested scores, not the only right answer."
+      ],
+      "scene": "s04",
+      "cue": 6
+     },
+     {
+      "start": 158.962,
+      "end": 161.407,
+      "text": [
+       "這份評閱刻意區分兩件事：",
+       "The review deliberately separates two things:"
+      ],
+      "scene": "s05",
+      "cue": 0
+     },
+     {
+      "start": 162.039,
+      "end": 165.667,
+      "text": [
+       "妨礙理解的文法錯誤，和可選的風格改善。",
+       "grammar errors that hinder meaning, and optional style improvements."
+      ],
+      "scene": "s05",
+      "cue": 1
+     },
+     {
+      "start": 166.75,
+      "end": 171.011,
+      "text": [
+       "三十則修改對照中，二十二則標為表達優化，",
+       "Of the thirty edits, twenty-two are labeled expression refinements;"
+      ],
+      "scene": "s05",
+      "cue": 2
+     },
+     {
+      "start": 171.011,
+      "end": 178.656,
+      "text": [
+       "其餘八則是搭配、範圍、概念、論述、語體與因果的修訂，",
+       "the other eight revise collocation, scope, concepts, argument, register, and causality,"
+      ],
+      "scene": "s05",
+      "cue": 3
+     },
+     {
+      "start": 178.656,
+      "end": 180.752,
+      "text": [
+       "沒有一則被標成文法錯誤。",
+       "and not one is labeled a grammar error."
+      ],
+      "scene": "s05",
+      "cue": 4
+     },
+     {
+      "start": 181.565,
+      "end": 186.79,
+      "text": [
+       "例如把 Online long-distance courses 精簡成 Online courses，",
+       "For example, \"Online long-distance courses\" is trimmed to \"Online courses\","
+      ],
+      "scene": "s05",
+      "cue": 5
+     },
+     {
+      "start": 186.79,
+      "end": 189.927,
+      "text": [
+       "評語寫明：原寫法並非嚴重文法錯誤。",
+       "and the comment says the original was not a serious grammar error."
+      ],
+      "scene": "s05",
+      "cue": 6
+     },
+     {
+      "start": 190.862,
+      "end": 195.615,
+      "text": [
+       "共用題目裡的 course 單數與 increase of，十篇都一樣，",
+       "The shared title's singular \"course\" and \"increase of\" appear in all ten,"
+      ],
+      "scene": "s05",
+      "cue": 7
+     },
+     {
+      "start": 195.615,
+      "end": 198.364,
+      "text": [
+       "所以統一說明，不算個人扣分。",
+       "so they were explained once, not deducted per student."
+      ],
+      "scene": "s05",
+      "cue": 8
+     },
+     {
+      "start": 203.649,
+      "end": 207.647,
+      "text": [
+       "第 8 分 36 秒，Word 報告產生了，",
+       "At 8:36 the Word report was generated,"
+      ],
+      "scene": "s06",
+      "cue": 0
+     },
+     {
+      "start": 207.647,
+      "end": 214.098,
+      "text": [
+       "但標準轉圖工具找不到 LibreOffice 的 soffice.exe，渲染失敗。",
+       "but the standard renderer couldn't find LibreOffice's soffice.exe and failed."
+      ],
+      "scene": "s06",
+      "cue": 1
+     },
+     {
+      "start": 214.951,
+      "end": 223.656,
+      "text": [
+       "替代做法是由命令在背景以 Word COM 唯讀開啟，匯出 PDF，再轉成圖片檢查。",
+       "The workaround: a command opened it read-only via Word COM in the background, exported a PDF, then rendered images to check."
+      ],
+      "scene": "s06",
+      "cue": 2
+     },
+     {
+      "start": 224.381,
+      "end": 229.793,
+      "text": [
+       "這是命令觸發的背景匯出，不是有人在 Word 裡按下匯出。",
+       "This was a command-triggered background export, not someone clicking Export in Word."
+      ],
+      "scene": "s06",
+      "cue": 3
+     },
+     {
+      "start": 232.818,
+      "end": 240.788,
+      "text": [
+       "簡報規格鎖定為十四頁、1280×720 畫布，暖白底配深青標題。",
+       "The deck spec was locked: 14 slides on a 1280×720 canvas, warm white with deep teal titles."
+      ],
+      "scene": "s07",
+      "cue": 0
+     },
+     {
+      "start": 241.583,
+      "end": 248.331,
+      "text": [
+       "數據以可編輯的數字文字呈現，不是圖表物件，所以沒有啟動圖表驗證。",
+       "Figures are editable text, not chart objects, so chart verification was not triggered."
+      ],
+      "scene": "s07",
+      "cue": 1
+     },
+     {
+      "start": 249.269,
+      "end": 253.286,
+      "text": [
+       "手寫前五頁 SVG 後，早期檢查出現提示：",
+       "After hand-writing the first five SVG slides, the early check raised warnings:"
+      ],
+      "scene": "s07",
+      "cue": 2
+     },
+     {
+      "start": 254.032,
+      "end": 260.188,
+      "text": [
+       "頁碼角色誤寫成 slide-number，第二頁的文字超出群組下緣。",
+       "the page-number role was written as slide-number, and text on slide 2 overran its group's lower edge."
+      ],
+      "scene": "s07",
+      "cue": 3
+     },
+     {
+      "start": 260.188,
+      "end": 263.364,
+      "text": [
+       "同一步也發現環境缺少 fitz 套件。",
+       "The same step found the fitz package missing."
+      ],
+      "scene": "s07",
+      "cue": 4
+     },
+     {
+      "start": 264.199,
+      "end": 269.005,
+      "text": [
+       "改成 page-number、加大下緣後，前五頁零警告；",
+       "After switching to page-number and enlarging the margin, slides 1–5 had zero warnings;"
+      ],
+      "scene": "s07",
+      "cue": 5
+     },
+     {
+      "start": 269.609,
+      "end": 274.33,
+      "text": [
+       "PDF 轉圖則改用已有的 pypdfium2。",
+       "PDF-to-image switched to the available pypdfium2."
+      ],
+      "scene": "s07",
+      "cue": 6
+     },
+     {
+      "start": 278.662,
+      "end": 285.245,
+      "text": [
+       "第 15 分 27 秒，一次外層 JavaScript 指令出現 SyntaxError，",
+       "At 15:27 an outer JavaScript call threw a SyntaxError,"
+      ],
+      "scene": "s08",
+      "cue": 0
+     },
+     {
+      "start": 285.245,
+      "end": 287.986,
+      "text": [
+       "內層命令根本沒有執行。",
+       "so the inner command never ran."
+      ],
+      "scene": "s08",
+      "cue": 1
+     },
+     {
+      "start": 287.986,
+      "end": 293.077,
+      "text": [
+       "改用 String.raw 重送相同內容，完成第六到第十頁。",
+       "Resent with String.raw, the same content completed slides 6 to 10."
+      ],
+      "scene": "s08",
+      "cue": 2
+     },
+     {
+      "start": 294.16,
+      "end": 297.614,
+      "text": [
+       "接著處理 Word 只有十九頁的原因：",
+       "Next came the reason Word had only 19 pages:"
+      ],
+      "scene": "s08",
+      "cue": 3
+     },
+     {
+      "start": 297.614,
+      "end": 303.702,
+      "text": [
+       "清理文字時無條件重設 run.text，把分頁符號變成一般換行。",
+       "text cleanup reset run.text unconditionally, turning page breaks into ordinary line breaks."
+      ],
+      "scene": "s08",
+      "cue": 4
+     },
+     {
+      "start": 304.444,
+      "end": 307.642,
+      "text": [
+       "改成只有字元真的改變時才重設。",
+       "The fix: reset it only when characters actually change."
+      ],
+      "scene": "s08",
+      "cue": 5
+     },
+     {
+      "start": 311.442,
+      "end": 314.727,
+      "text": [
+       "第 18 分 05 秒，最後四頁完成。",
+       "At 18:05 the last four slides were done."
+      ],
+      "scene": "s09",
+      "cue": 0
+     },
+     {
+      "start": 315.355,
+      "end": 323.897,
+      "text": [
+       "最終檢查還有兩項提示：第十一頁群組下緣不足，第十四頁有重複的字級屬性；",
+       "The final check flagged two items: slide 11's group bounds were short, and slide 14 repeated a font-size attribute;"
+      ],
+      "scene": "s09",
+      "cue": 1
+     },
+     {
+      "start": 324.638,
+      "end": 328.471,
+      "text": [
+       "修正後，十四頁全部通過、零警告。",
+       "after fixes, all 14 passed with zero warnings."
+      ],
+      "scene": "s09",
+      "cue": 2
+     },
+     {
+      "start": 329.538,
+      "end": 337.184,
+      "text": [
+       "但 Word 這版變成二十四頁：多了一頁空白，標題還帶著預設的藍色下框線。",
+       "But this Word version had 24 pages: an extra blank page, and headings carried a default blue bottom border."
+      ],
+      "scene": "s09",
+      "cue": 3
+     },
+     {
+      "start": 338.189,
+      "end": 343.1,
+      "text": [
+       "當時回傳的頁面圖裡，01 號的評閱被推到第五頁。",
+       "In the page images returned then, essay 01's review was pushed to page 5."
+      ],
+      "scene": "s09",
+      "cue": 4
+     },
+     {
+      "start": 346.575,
+      "end": 354.688,
+      "text": [
+       "修正方法是刪除標題的段落框線，縮小檔案對照表的字級與段後距。",
+       "The fix removed the heading paragraph border and shrank the file list's font size and spacing."
+      ],
+      "scene": "s10",
+      "cue": 0
+     },
+     {
+      "start": 355.726,
+      "end": 360.497,
+      "text": [
+       "Word 回到二十三頁，01 號評閱回到第四頁。",
+       "Word returned to 23 pages, with essay 01 back on page 4."
+      ],
+      "scene": "s10",
+      "cue": 1
+     },
+     {
+      "start": 361.614,
+      "end": 368.528,
+      "text": [
+       "SVG 定稿時又遇到 WinError 32：資料夾被另一個程序占用。",
+       "Finalizing the SVGs then hit WinError 32: another process was using the folder."
+      ],
+      "scene": "s10",
+      "cue": 2
+     },
+     {
+      "start": 369.337,
+      "end": 373.888,
+      "text": [
+       "日誌沒有記錄是哪個程序，同步軟體只是推測；",
+       "The log doesn't name the process; sync software is only a hypothesis;"
+      ],
+      "scene": "s10",
+      "cue": 3
+     },
+     {
+      "start": 374.787,
+      "end": 376.745,
+      "text": [
+       "重試一次就成功了。",
+       "one retry succeeded."
+      ],
+      "scene": "s10",
+      "cue": 4
+     },
+     {
+      "start": 380.211,
+      "end": 385.914,
+      "text": [
+       "第 20 分 34 秒，以不含講者備註、不含動畫的設定，",
+       "At 20:34, with no speaker notes and no animations,"
+      ],
+      "scene": "s11",
+      "cue": 0
+     },
+     {
+      "start": 385.914,
+      "end": 391.982,
+      "text": [
+       "匯出原生可編輯的 PowerPoint；postflight 與 quality gate 都通過。",
+       "a natively editable PowerPoint was exported; postflight and the quality gate both passed."
+      ],
+      "scene": "s11",
+      "cue": 1
+     },
+     {
+      "start": 393.013,
+      "end": 397.039,
+      "text": [
+       "接著分四批，逐頁查看 Word 最終二十三頁。",
+       "Then all 23 final Word pages were viewed, in four batches."
+      ],
+      "scene": "s11",
+      "cue": 2
+     },
+     {
+      "start": 397.937,
+      "end": 400.697,
+      "text": [
+       "原作業並沒有在 PowerPoint 裡逐頁觀看；",
+       "The original run never viewed the slides page by page in PowerPoint;"
+      ],
+      "scene": "s11",
+      "cue": 3
+     },
+     {
+      "start": 401.597,
+      "end": 406.143,
+      "text": [
+       "畫面上的投影片圖，是隔天交接時才補製的預覽。",
+       "the slide images shown here are previews made the next day, at handoff."
+      ],
+      "scene": "s11",
+      "cue": 4
+     },
+     {
+      "start": 409.612,
+      "end": 417.127,
+      "text": [
+       "最後驗證：十篇作文、三十則修改、Word 二十三頁、簡報十四頁。",
+       "Final check: ten essays, thirty edits, 23 Word pages, 14 slides."
+      ],
+      "scene": "s12",
+      "cue": 0
+     },
+     {
+      "start": 418.129,
+      "end": 422.381,
+      "text": [
+       "日誌記錄的總長是 22 分 4.778 秒。",
+       "The log records a total of 22 minutes 4.778 seconds."
+      ],
+      "scene": "s12",
+      "cue": 1
+     },
+     {
+      "start": 423.135,
+      "end": 429.938,
+      "text": [
+       "累計約四百七十九萬 tokens，其中九成六是快取重用的輸入，",
+       "About 4.79 million tokens in total, 96% of them cached input reused across turns;"
+      ],
+      "scene": "s12",
+      "cue": 2
+     },
+     {
+      "start": 429.938,
+      "end": 431.918,
+      "text": [
+       "輸出只有三萬五千多。",
+       "output was just over 35,000."
+      ],
+      "scene": "s12",
+      "cue": 3
+     },
+     {
+      "start": 432.94,
+      "end": 437.637,
+      "text": [
+       "這是多輪重讀上下文的計量，不是生成了四百多萬字。",
+       "That counts repeatedly re-read context, not four million words of new text."
+      ],
+      "scene": "s12",
+      "cue": 4
+     },
+     {
+      "start": 438.752,
+      "end": 444.862,
+      "text": [
+       "快取已包含在輸入中，不能再加一次；推理輸出也只是分類計數。",
+       "Cached tokens are already inside input and must not be added again; reasoning output is only a sub-count."
+      ],
+      "scene": "s12",
+      "cue": 5
+     },
+     {
+      "start": 446.167,
+      "end": 454.869,
+      "text": [
+       "帳戶五小時額度從 13% 變成 91%，週額度從 52% 變成 64%。",
+       "The account's 5-hour usage went from 13% to 91%; weekly from 52% to 64%."
+      ],
+      "scene": "s12",
+      "cue": 6
+     },
+     {
+      "start": 455.633,
+      "end": 462.046,
+      "text": [
+       "這是共享帳戶的快照，只能說期間觀察到增加，不能全部歸給這個任務。",
+       "These are shared-account snapshots: an observed increase, not consumption owned by this task alone."
+      ],
+      "scene": "s12",
+      "cue": 7
+     },
+     {
+      "start": 462.852,
+      "end": 468.953,
+      "text": [
+       "第一筆額度快照在開始後 9 秒才取得，金額成本則沒有資料。",
+       "The first quota snapshot came 9 seconds after the start, and there is no data on monetary cost."
+      ],
+      "scene": "s12",
+      "cue": 8
+     },
+     {
+      "start": 474.173,
+      "end": 479.749,
+      "text": [
+       "這支影片沒有原始桌面錄影，也沒有滑鼠軌跡或點擊座標。",
+       "There is no original screen recording here, and no mouse paths or click coordinates."
+      ],
+      "scene": "s13",
+      "cue": 0
+     },
+     {
+      "start": 480.725,
+      "end": 484.072,
+      "text": [
+       "命令卡和時間卡都依操作日誌重建；",
+       "Command and time cards are rebuilt from the log;"
+      ],
+      "scene": "s13",
+      "cue": 1
+     },
+     {
+      "start": 485.026,
+      "end": 491.945,
+      "text": [
+       "文件圖分成當時回傳、最終保存，與交接補製三種。",
+       "document images come in three kinds: returned at the time, saved final copies, and made at handoff."
+      ],
+      "scene": "s13",
+      "cue": 2
+     },
+     {
+      "start": 491.945,
+      "end": 496.569,
+      "text": [
+       "原作業的簡報本身沒有旁白、動畫和講者備註。",
+       "The original deck itself has no narration, animation, or speaker notes."
+      ],
+      "scene": "s13",
+      "cue": 3
+     },
+     {
+      "start": 497.336,
+      "end": 506.396,
+      "text": [
+       "需要重建成品時，應依重現說明在獨立目錄執行，不能直接重跑保留下來的失敗命令。",
+       "To rebuild the outputs, follow the reproduction notes in a separate directory; never replay the preserved failing commands."
+      ],
+      "scene": "s13",
+      "cue": 4
+     },
+     {
+      "start": 507.887,
+      "end": 514.298,
+      "text": [
+       "值得帶走的是：失敗被保留下來，每一次修正都有證據可以回查。",
+       "The takeaway: failures were kept, and every fix can be traced back to evidence."
+      ],
+      "scene": "s13",
+      "cue": 5
+     }
+    ]
+   }
+  }
+ }
+}
